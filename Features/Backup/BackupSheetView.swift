@@ -22,8 +22,7 @@ struct BackupSheetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            // ── 标题 ──────────────────────────────────────────
-            Text("立即备份")
+            Text(L("Backup Now Title"))
                 .font(.title2).bold()
                 .padding(.horizontal, 24)
                 .padding(.top, 22)
@@ -31,11 +30,12 @@ struct BackupSheetView: View {
 
             Divider()
 
-            // ── 内容区 ────────────────────────────────────────
             VStack(alignment: .leading, spacing: 18) {
 
-                // State 目录
-                SectionBlock(title: "State 目录", footnote: "包含配置、凭证、sessions 及所有 agent 数据。") {
+                SectionBlock(
+                    title: L("State Directory"),
+                    footnote: L("Contains configs, credentials, sessions and all agent data.")
+                ) {
                     if !useCustomState {
                         HStack(spacing: 8) {
                             Image(systemName: "folder.fill")
@@ -47,20 +47,20 @@ struct BackupSheetView: View {
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                             Spacer()
-                            Button("自定义") { useCustomState = true }
+                            Button(L("Customize")) { useCustomState = true }
                                 .font(.caption)
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Color.accentColor)
                         }
                     } else {
                         HStack(spacing: 6) {
-                            TextField("State 目录路径", text: $customStatePath)
+                            TextField(L("State Directory Path"), text: $customStatePath)
                                 .textFieldStyle(.roundedBorder)
                                 .font(.system(.caption, design: .monospaced))
                                 .disabled(phase == .running)
-                            Button("选择…") { chooseDirectory(for: .state) }
+                            Button(L("Choose...")) { chooseDirectory(for: .state) }
                                 .disabled(phase == .running)
-                            Button("重置") {
+                            Button(L("Reset")) {
                                 useCustomState = false
                                 customStatePath = ""
                             }
@@ -71,8 +71,10 @@ struct BackupSheetView: View {
                     }
                 }
 
-                // Workspace 目录
-                SectionBlock(title: "Workspace 目录", footnote: "包含记忆、技能文件。多 agent 场景下每个 agent 有独立 workspace。") {
+                SectionBlock(
+                    title: L("Workspace Directory"),
+                    footnote: L("Contains memory and skill files. Each agent has its own workspace in multi-agent setups.")
+                ) {
                     VStack(alignment: .leading, spacing: 6) {
                         ForEach(workspacePaths) { item in
                             HStack(spacing: 8) {
@@ -97,26 +99,27 @@ struct BackupSheetView: View {
                         }
 
                         HStack(spacing: 6) {
-                            TextField("添加 Workspace 路径…", text: $addingPath)
+                            TextField(L("Add Workspace Path..."), text: $addingPath)
                                 .textFieldStyle(.roundedBorder)
                                 .font(.system(.caption, design: .monospaced))
                                 .disabled(phase == .running)
-                            Button("浏览…") { chooseDirectory(for: .workspace) }
+                            Button(L("Browse...")) { chooseDirectory(for: .workspace) }
                                 .disabled(phase == .running)
-                            Button("添加") { commitAddingPath() }
+                            Button(L("Add")) { commitAddingPath() }
                                 .disabled(addingPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phase == .running)
                         }
                     }
                 }
 
-                // 备份标签
-                SectionBlock(title: "备份标签（可选）", footnote: "附加到存档 ID 末尾，仅支持字母、数字、连字符。") {
-                    TextField("例如：upgrade-before-v2", text: $customLabel)
+                SectionBlock(
+                    title: L("Backup Label (Optional)"),
+                    footnote: L("Appended to archive ID. Letters, numbers, hyphens only.")
+                ) {
+                    TextField(L("e.g. upgrade-before-v2"), text: $customLabel)
                         .textFieldStyle(.roundedBorder)
                         .disabled(phase == .running)
                 }
 
-                // 结果区
                 if phase != .idle {
                     phaseView
                 }
@@ -128,10 +131,9 @@ struct BackupSheetView: View {
 
             Divider()
 
-            // ── 底部按钮 ──────────────────────────────────────
             HStack {
                 Spacer()
-                Button("取消") { isPresented = false }
+                Button(L("Cancel")) { isPresented = false }
                     .disabled(phase == .running)
                     .keyboardShortcut(.escape, modifiers: [])
 
@@ -141,10 +143,10 @@ struct BackupSheetView: View {
                     if phase == .running {
                         HStack(spacing: 6) {
                             ProgressView().controlSize(.small)
-                            Text("备份中…")
+                            Text(L("Backing Up..."))
                         }
                     } else {
-                        Text("开始备份")
+                        Text(L("Start Backup"))
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -170,7 +172,7 @@ struct BackupSheetView: View {
         case .running:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
-                Text("正在备份，请稍候…").foregroundStyle(.secondary).font(.subheadline)
+                Text(L("Backing up, please wait...")).foregroundStyle(.secondary).font(.subheadline)
             }
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -178,27 +180,27 @@ struct BackupSheetView: View {
 
         case .success(let result):
             VStack(alignment: .leading, spacing: 8) {
-                Label("备份成功", systemImage: "checkmark.circle.fill")
+                Label(L("Backup Succeeded"), systemImage: "checkmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.green)
                 Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
                     GridRow {
-                        Text("OpenClaw 版本").foregroundStyle(.secondary)
+                        Text(L("OpenClaw Version")).foregroundStyle(.secondary)
                         Text(result.meta.openClawVersion).font(.system(.caption, design: .monospaced))
                     }
                     GridRow {
-                        Text("文件数").foregroundStyle(.secondary)
-                        Text("\(result.meta.fileCount) 个文件")
+                        Text(L("File Count")).foregroundStyle(.secondary)
+                        Text("\(result.meta.fileCount) \(L("files"))")
                     }
                     GridRow {
-                        Text("备份大小").foregroundStyle(.secondary)
+                        Text(L("Backup Size")).foregroundStyle(.secondary)
                         Text(Formatters.byteCount(result.meta.sizeBytes))
                     }
                     GridRow {
-                        Text("耗时").foregroundStyle(.secondary)
-                        Text(String(format: "%.2f 秒", result.elapsed))
+                        Text(L("Elapsed")).foregroundStyle(.secondary)
+                        Text(String(format: "%.2f \(L("seconds"))", result.elapsed))
                     }
                     GridRow {
-                        Text("存档 ID").foregroundStyle(.secondary)
+                        Text(L("Archive ID")).foregroundStyle(.secondary)
                         Text(result.meta.archiveId).font(.system(.caption, design: .monospaced))
                     }
                 }
@@ -211,7 +213,7 @@ struct BackupSheetView: View {
 
         case .failure(let message):
             VStack(alignment: .leading, spacing: 6) {
-                Label("备份失败", systemImage: "xmark.circle.fill")
+                Label(L("Backup Failed"), systemImage: "xmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.red)
                 Text(message).font(.caption).foregroundStyle(.secondary)
             }
@@ -243,7 +245,7 @@ struct BackupSheetView: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
-        panel.prompt = "选择"
+        panel.prompt = L("Select")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         switch target {
         case .state:
