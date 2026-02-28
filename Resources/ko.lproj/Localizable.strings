@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "일반";
+"OpenClaw Path" = "OpenClaw 경로";
+"State Directory" = "State 디렉토리";
+"Reset to Default" = "기본값으로 재설정";
+"Detected Version" = "감지된 버전";
+"Behavior" = "동작";
+"Auto-refresh on Launch" = "시작 시 백업 목록 자동 새로고침";
+
+/* Settings - Storage */
+"Storage" = "저장소";
+"Backup Storage Location" = "백업 저장 위치";
+"Path" = "경로";
+"Backup Count" = "백업 수";
+"archives" = "개";
+"Disk Usage" = "디스크 사용량";
+"Calculating..." = "계산 중…";
+
+/* Settings - Appearance */
+"Appearance" = "외관";
+"System" = "시스템";
+"Light" = "라이트";
+"Dark" = "다크";
+
+/* Settings - Language */
+"Language" = "언어";
+
+/* Settings - About */
+"About" = "정보";
+"Version" = "버전";
+"Author" = "작성자";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "OpenClaw 백업 및 복원 도구";
