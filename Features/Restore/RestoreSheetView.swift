@@ -6,10 +6,9 @@ struct RestoreSheetView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject private var archiveStore: ArchiveStore
 
-    // 三步确认状态
-    @State private var step1Checked = false       // 第一步：勾选理解风险
-    @State private var step2Checked = false       // 第二步：勾选理解覆盖
-    @State private var confirmText = ""           // 第三步：输入 RESTORE
+    @State private var step1Checked = false
+    @State private var step2Checked = false
+    @State private var confirmText = ""
     @State private var createPreSnapshot = true
     @State private var phase: RestorePhase = .confirm
 
@@ -27,12 +26,11 @@ struct RestoreSheetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            // 标题
             HStack(spacing: 10) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.title2)
                     .foregroundStyle(.red)
-                Text("还原备份")
+                Text(L("Restore Backup"))
                     .font(.title2).bold()
                     .foregroundStyle(.red)
             }
@@ -44,9 +42,8 @@ struct RestoreSheetView: View {
 
             VStack(alignment: .leading, spacing: 20) {
 
-                // 存档信息
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("目标存档")
+                    Text(L("Target Archive"))
                         .font(.caption).fontWeight(.semibold)
                         .foregroundStyle(.secondary).textCase(.uppercase)
                     HStack(spacing: 8) {
@@ -55,13 +52,12 @@ struct RestoreSheetView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(archive.meta.archiveId)
                                 .font(.system(.subheadline, design: .monospaced))
-                            Text("\(Formatters.dateTime(archive.meta.createdAt)) · \(archive.meta.fileCount) 个文件 · \(Formatters.byteCount(archive.meta.sizeBytes))")
+                            Text("\(Formatters.dateTime(archive.meta.createdAt)) · \(archive.meta.fileCount) \(L("files")) · \(Formatters.byteCount(archive.meta.sizeBytes))")
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                     }
                 }
 
-                // 版本兼容性警告
                 if let warning = compatibility.warningMessage {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: compatibility.requiresStrongWarning
@@ -82,12 +78,11 @@ struct RestoreSheetView: View {
                         .stroke(compatibility.requiresStrongWarning ? Color.red.opacity(0.3) : Color.orange.opacity(0.3), lineWidth: 1))
                 }
 
-                // 还原前快照开关
                 Toggle(isOn: $createPreSnapshot) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("还原前创建快照（强烈推荐）")
+                        Text(L("Create snapshot before restore (strongly recommended)"))
                             .font(.subheadline).fontWeight(.medium)
-                        Text("自动备份当前 OpenClaw 数据，还原失败时可从快照恢复")
+                        Text(L("Automatically backs up current OpenClaw data. Recoverable if restore fails."))
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -95,29 +90,25 @@ struct RestoreSheetView: View {
 
                 Divider()
 
-                // ── 三步确认区 ──────────────────────────────────
                 VStack(alignment: .leading, spacing: 14) {
-                    Text("请完成以下三步确认才能执行还原")
+                    Text(L("Complete all three steps below to proceed"))
                         .font(.caption).fontWeight(.semibold)
                         .foregroundStyle(.secondary).textCase(.uppercase)
 
-                    // 第一步
                     ConfirmCheckRow(
                         step: 1,
                         isChecked: $step1Checked,
                         isDisabled: phase != .confirm,
-                        label: "我了解此操作将覆盖当前 OpenClaw 数据目录，操作不可撤销。"
+                        label: L("I understand this will overwrite the current OpenClaw data directory and cannot be undone.")
                     )
 
-                    // 第二步
                     ConfirmCheckRow(
                         step: 2,
                         isChecked: $step2Checked,
                         isDisabled: !step1Checked || phase != .confirm,
-                        label: "我了解还原后当前所有未备份的数据将被永久覆盖，无法恢复。"
+                        label: L("I understand all unbacked data will be permanently overwritten and cannot be recovered.")
                     )
 
-                    // 第三步：输入确认词
                     HStack(alignment: .top, spacing: 10) {
                         ZStack {
                             Circle()
@@ -129,10 +120,10 @@ struct RestoreSheetView: View {
                         }
 
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("在下方输入 \(requiredWord) 以最终确认")
+                            Text(L("Type RESTORE below to confirm"))
                                 .font(.subheadline)
                                 .foregroundStyle(!step2Checked ? .secondary : .primary)
-                            TextField("输入 \(requiredWord)", text: $confirmText)
+                            TextField(L("Type RESTORE"), text: $confirmText)
                                 .textFieldStyle(.roundedBorder)
                                 .font(.system(.body, design: .monospaced))
                                 .disabled(!step2Checked || phase != .confirm)
@@ -153,7 +144,6 @@ struct RestoreSheetView: View {
                 .background(Color.red.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.red.opacity(0.15), lineWidth: 1))
 
-                // 结果区
                 if phase != .confirm {
                     phaseView
                 }
@@ -164,10 +154,9 @@ struct RestoreSheetView: View {
             Spacer(minLength: 0)
             Divider()
 
-            // 底部按钮
             HStack {
                 Spacer()
-                Button("取消") { isPresented = false }
+                Button(L("Cancel")) { isPresented = false }
                     .disabled(phase == .restoring)
                     .keyboardShortcut(.escape, modifiers: [])
 
@@ -177,10 +166,10 @@ struct RestoreSheetView: View {
                     if phase == .restoring {
                         HStack(spacing: 6) {
                             ProgressView().controlSize(.small)
-                            Text("还原中…")
+                            Text(L("Restoring..."))
                         }
                     } else {
-                        Label("开始还原", systemImage: "arrow.counterclockwise.circle.fill")
+                        Label(L("Start Restore"), systemImage: "arrow.counterclockwise.circle.fill")
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -205,7 +194,7 @@ struct RestoreSheetView: View {
         case .restoring:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
-                Text("正在还原，请稍候…").foregroundStyle(.secondary).font(.subheadline)
+                Text(L("Restoring, please wait...")).foregroundStyle(.secondary).font(.subheadline)
             }
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -213,20 +202,20 @@ struct RestoreSheetView: View {
 
         case .success(let result):
             VStack(alignment: .leading, spacing: 10) {
-                Label("还原成功", systemImage: "checkmark.circle.fill")
+                Label(L("Restore Succeeded"), systemImage: "checkmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.green)
                 Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
                     GridRow {
-                        Text("覆盖文件数").foregroundStyle(.secondary)
-                        Text("\(result.copiedFileCount) 个文件")
+                        Text(L("Files Overwritten")).foregroundStyle(.secondary)
+                        Text("\(result.copiedFileCount) \(L("files"))")
                     }
                     GridRow {
-                        Text("耗时").foregroundStyle(.secondary)
-                        Text(String(format: "%.2f 秒", result.elapsed))
+                        Text(L("Elapsed")).foregroundStyle(.secondary)
+                        Text(String(format: "%.2f \(L("seconds"))", result.elapsed))
                     }
                     if let snapshotId = result.preSnapshotArchiveId {
                         GridRow {
-                            Text("还原前快照").foregroundStyle(.secondary)
+                            Text(L("Pre-restore Snapshot")).foregroundStyle(.secondary)
                             Text(snapshotId).font(.system(.caption, design: .monospaced))
                         }
                     }
@@ -235,14 +224,14 @@ struct RestoreSheetView: View {
 
                 if result.hasErrors {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("以下文件还原失败：")
+                        Text(L("The following files failed to restore:"))
                             .font(.caption).bold().foregroundStyle(.orange)
                         ForEach(result.failedItems.prefix(5), id: \.relativePath) { item in
                             Text("• \(item.relativePath)：\(item.reason)")
                                 .font(.caption2).foregroundStyle(.secondary)
                         }
                         if result.failedItems.count > 5 {
-                            Text("…还有 \(result.failedItems.count - 5) 个文件失败")
+                            Text(String(format: L("...and %d more failed"), result.failedItems.count - 5))
                                 .font(.caption2).foregroundStyle(.secondary)
                         }
                     }
@@ -257,7 +246,7 @@ struct RestoreSheetView: View {
 
         case .failure(let message):
             VStack(alignment: .leading, spacing: 6) {
-                Label("还原失败", systemImage: "xmark.circle.fill")
+                Label(L("Restore Failed"), systemImage: "xmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.red)
                 Text(message).font(.caption).foregroundStyle(.secondary)
             }
@@ -274,11 +263,11 @@ struct RestoreSheetView: View {
         guard allStepsComplete else { return }
 
         let alert = NSAlert()
-        alert.messageText = "最终确认：执行还原？"
-        alert.informativeText = "此操作将立即覆盖 OpenClaw 数据目录（\(OpenClawPaths.stateDirectory.path)），无法撤销。\n\n确认继续？"
+        alert.messageText = L("Final Confirmation: Proceed with Restore?")
+        alert.informativeText = String(format: L("This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?"), OpenClawPaths.stateDirectory.path)
         alert.alertStyle = .critical
-        alert.addButton(withTitle: "立即还原")
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L("Restore Now"))
+        alert.addButton(withTitle: L("Cancel"))
 
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
