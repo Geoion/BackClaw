@@ -8,17 +8,16 @@ struct SettingsView: View {
         TabView {
             GeneralSettingsTab()
                 .tabItem { Label(L("General"), systemImage: "gearshape") }
-                .id(appState.languageRefreshId)
 
             StorageSettingsTab()
                 .tabItem { Label(L("Storage"), systemImage: "internaldrive") }
-                .id(appState.languageRefreshId)
 
             AboutTab()
                 .tabItem { Label(L("About"), systemImage: "info.circle") }
-                .id(appState.languageRefreshId)
         }
-        .frame(width: 480, height: 360)
+        .id(appState.languageRefreshId)
+        .frame(width: 480)
+        .fixedSize()
     }
 }
 
@@ -73,13 +72,12 @@ private struct GeneralSettingsTab: View {
                         Text(lang.displayName).tag(lang)
                     }
                 }
-                .pickerStyle(.menu)
-                .frame(maxWidth: 200, alignment: .trailing)
             }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
-        .padding(.vertical, 8)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.bottom, 8)
     }
 
     private func localizedModeName(_ mode: AppearanceMode) -> String {
@@ -96,7 +94,6 @@ private struct GeneralSettingsTab: View {
 private struct StorageSettingsTab: View {
     @State private var backupsSize: String = ""
     @State private var backupsCount: Int = 0
-    @EnvironmentObject private var appState: AppState
 
     var body: some View {
         Form {
@@ -131,7 +128,8 @@ private struct StorageSettingsTab: View {
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
-        .padding(.vertical, 8)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.bottom, 8)
         .onAppear { calculateStorage() }
     }
 
@@ -168,7 +166,7 @@ private struct StorageSettingsTab: View {
 
 private struct AboutTab: View {
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: "externaldrive.badge.checkmark")
                 .font(.system(size: 52))
                 .foregroundStyle(Color.accentColor)
@@ -187,12 +185,11 @@ private struct AboutTab: View {
 
             Divider()
 
-            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
+            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 10) {
                 GridRow {
                     Text(L("Author"))
                         .foregroundStyle(.secondary)
                     Text("Geoion")
-                        .font(.system(.body, design: .default))
                 }
                 GridRow {
                     Text(L("GitHub"))
@@ -210,7 +207,7 @@ private struct AboutTab: View {
             }
             .font(.subheadline)
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(28)
+        .frame(maxWidth: .infinity)
     }
 }
