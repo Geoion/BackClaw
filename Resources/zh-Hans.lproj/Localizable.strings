@@ -1,13 +1,129 @@
-/* Settings - General */
+/* ── Toolbar ── */
+"Refresh" = "刷新";
+"Refresh backup list" = "刷新备份列表";
+"Importing..." = "导入中…";
+"Import Backup" = "导入备份";
+"Import a backup from tar.gz or zip" = "从 tar.gz 或 zip 文件导入备份";
+"Backup Now" = "立即备份";
+"Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
+
+/* ── Alerts ── */
+"Import Failed" = "导入失败";
+"OK" = "确定";
+"Unknown Error" = "未知错误";
+
+/* ── File Panel ── */
+"Select Backup File" = "选择备份文件";
+"Select a .tar.gz or .zip exported by BackClaw" = "选择 BackClaw 导出的 .tar.gz 或 .zip 文件";
+"Select" = "选择";
+
+/* ── Sidebar ── */
+"Backup Records" = "备份记录";
+"No Backups" = "暂无备份";
+"Click \"Backup Now\" in the toolbar to create your first backup" = "点击工具栏「立即备份」创建第一个备份";
+"files" = "个文件";
+
+/* ── Empty Detail ── */
+"No Backup Selected" = "未选择备份";
+"Select a backup from the list to view details" = "从左侧列表选择一个备份以查看详情";
+
+/* ── Backup Sheet ── */
+"Backup Now Title" = "立即备份";
+"State Directory" = "State 目录";
+"Contains configs, credentials, sessions and all agent data." = "包含配置、凭证、sessions 及所有 agent 数据。";
+"Customize" = "自定义";
+"State Directory Path" = "State 目录路径";
+"Choose..." = "选择…";
+"Reset" = "重置";
+"Workspace Directory" = "Workspace 目录";
+"Contains memory and skill files. Each agent has its own workspace in multi-agent setups." = "包含记忆、技能文件。多 agent 场景下每个 agent 有独立 workspace。";
+"Add Workspace Path..." = "添加 Workspace 路径…";
+"Browse..." = "浏览…";
+"Add" = "添加";
+"Backup Label (Optional)" = "备份标签（可选）";
+"Appended to archive ID. Letters, numbers, hyphens only." = "附加到存档 ID 末尾，仅支持字母、数字、连字符。";
+"e.g. upgrade-before-v2" = "例如：upgrade-before-v2";
+"Cancel" = "取消";
+"Backing Up..." = "备份中…";
+"Start Backup" = "开始备份";
+"Backing up, please wait..." = "正在备份，请稍候…";
+"Backup Succeeded" = "备份成功";
+"OpenClaw Version" = "OpenClaw 版本";
+"File Count" = "文件数";
+"Backup Size" = "备份大小";
+"Elapsed" = "耗时";
+"seconds" = "秒";
+"Archive ID" = "存档 ID";
+"Backup Failed" = "备份失败";
+
+/* ── Restore Sheet ── */
+"Restore Backup" = "还原备份";
+"Target Archive" = "目标存档";
+"Create snapshot before restore (strongly recommended)" = "还原前创建快照（强烈推荐）";
+"Automatically backs up current OpenClaw data. Recoverable if restore fails." = "自动备份当前 OpenClaw 数据，还原失败时可从快照恢复";
+"Complete all three steps below to proceed" = "请完成以下三步确认才能执行还原";
+"I understand this will overwrite the current OpenClaw data directory and cannot be undone." = "我了解此操作将覆盖当前 OpenClaw 数据目录，操作不可撤销。";
+"I understand all unbacked data will be permanently overwritten and cannot be recovered." = "我了解还原后当前所有未备份的数据将被永久覆盖，无法恢复。";
+"Type RESTORE below to confirm" = "在下方输入 RESTORE 以最终确认";
+"Type RESTORE" = "输入 RESTORE";
+"Restoring..." = "还原中…";
+"Start Restore" = "开始还原";
+"Restoring, please wait..." = "正在还原，请稍候…";
+"Restore Succeeded" = "还原成功";
+"Files Overwritten" = "覆盖文件数";
+"Pre-restore Snapshot" = "还原前快照";
+"The following files failed to restore:" = "以下文件还原失败：";
+"...and %d more failed" = "…还有 %d 个文件失败";
+"Restore Failed" = "还原失败";
+"Final Confirmation: Proceed with Restore?" = "最终确认：执行还原？";
+"This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?" = "此操作将立即覆盖 OpenClaw 数据目录（%@），无法撤销。\n\n确认继续？";
+"Restore Now" = "立即还原";
+
+/* ── Export Sheet ── */
+"Export Archive" = "导出压缩包";
+"Archive" = "存档";
+"Format" = "格式";
+"Compression Level" = "压缩级别";
+"Exporting..." = "导出中…";
+"Choose Location & Export" = "选择位置并导出";
+"Compressing, please wait..." = "正在压缩，请稍候…";
+"Export Succeeded" = "导出成功";
+"File Size" = "文件大小";
+"Output Path" = "输出路径";
+"Show in Finder" = "在 Finder 中显示";
+"Export Failed" = "导出失败";
+"Choose Export Location" = "选择导出位置";
+
+/* ── Preview ── */
+"File Structure" = "文件结构";
+"Loading..." = "加载中…";
+"Cannot Load Directory" = "无法加载目录";
+"Backup is Empty" = "备份内容为空";
+"This backup contains no files" = "此备份不包含任何文件";
+"File Preview" = "文件预览";
+"Reading..." = "读取中…";
+"Cannot Preview" = "无法预览";
+"No File Selected" = "未选择文件";
+"Select a file from the tree to preview" = "从左侧目录树选择一个文件进行预览";
+"Export" = "导出";
+"Export as Archive" = "导出为压缩包";
+"Restore" = "还原";
+"Restore this backup to OpenClaw data directory" = "将此备份还原到 OpenClaw 数据目录";
+"Size" = "大小";
+"Type" = "类型";
+"Status" = "状态";
+"Success" = "成功";
+"Failed" = "失败";
+
+/* ── Settings - General ── */
 "General" = "通用";
 "OpenClaw Path" = "OpenClaw 路径";
-"State Directory" = "State 目录";
 "Reset to Default" = "重置为默认";
 "Detected Version" = "检测到的版本";
 "Behavior" = "行为";
 "Auto-refresh on Launch" = "启动时自动刷新备份列表";
 
-/* Settings - Storage */
+/* ── Settings - Storage ── */
 "Storage" = "存储";
 "Backup Storage Location" = "备份存储位置";
 "Path" = "路径";
@@ -16,16 +132,16 @@
 "Disk Usage" = "占用空间";
 "Calculating..." = "计算中…";
 
-/* Settings - Appearance */
+/* ── Settings - Appearance ── */
 "Appearance" = "外观";
 "System" = "跟随系统";
 "Light" = "浅色";
 "Dark" = "深色";
 
-/* Settings - Language */
+/* ── Settings - Language ── */
 "Language" = "语言";
 
-/* Settings - About */
+/* ── Settings - About ── */
 "About" = "关于";
 "Version" = "版本";
 "Author" = "作者";
