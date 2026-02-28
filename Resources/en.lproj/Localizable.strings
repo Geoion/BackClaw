@@ -1,13 +1,129 @@
-/* Settings - General */
+/* ── Toolbar ── */
+"Refresh" = "Refresh";
+"Refresh backup list" = "Refresh backup list";
+"Importing..." = "Importing...";
+"Import Backup" = "Import Backup";
+"Import a backup from tar.gz or zip" = "Import a backup from a tar.gz or zip file";
+"Backup Now" = "Backup Now";
+"Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
+
+/* ── Alerts ── */
+"Import Failed" = "Import Failed";
+"OK" = "OK";
+"Unknown Error" = "Unknown Error";
+
+/* ── File Panel ── */
+"Select Backup File" = "Select Backup File";
+"Select a .tar.gz or .zip exported by BackClaw" = "Select a .tar.gz or .zip file exported by BackClaw";
+"Select" = "Select";
+
+/* ── Sidebar ── */
+"Backup Records" = "Backup Records";
+"No Backups" = "No Backups";
+"Click \"Backup Now\" in the toolbar to create your first backup" = "Click \"Backup Now\" in the toolbar to create your first backup";
+"files" = "files";
+
+/* ── Empty Detail ── */
+"No Backup Selected" = "No Backup Selected";
+"Select a backup from the list to view details" = "Select a backup from the list to view details";
+
+/* ── Backup Sheet ── */
+"Backup Now Title" = "Backup Now";
+"State Directory" = "State Directory";
+"Contains configs, credentials, sessions and all agent data." = "Contains configs, credentials, sessions and all agent data.";
+"Customize" = "Customize";
+"State Directory Path" = "State Directory Path";
+"Choose..." = "Choose...";
+"Reset" = "Reset";
+"Workspace Directory" = "Workspace Directory";
+"Contains memory and skill files. Each agent has its own workspace in multi-agent setups." = "Contains memory and skill files. Each agent has its own workspace in multi-agent setups.";
+"Add Workspace Path..." = "Add Workspace Path...";
+"Browse..." = "Browse...";
+"Add" = "Add";
+"Backup Label (Optional)" = "Backup Label (Optional)";
+"Appended to archive ID. Letters, numbers, hyphens only." = "Appended to archive ID. Letters, numbers, hyphens only.";
+"e.g. upgrade-before-v2" = "e.g. upgrade-before-v2";
+"Cancel" = "Cancel";
+"Backing Up..." = "Backing Up...";
+"Start Backup" = "Start Backup";
+"Backing up, please wait..." = "Backing up, please wait...";
+"Backup Succeeded" = "Backup Succeeded";
+"OpenClaw Version" = "OpenClaw Version";
+"File Count" = "File Count";
+"Backup Size" = "Backup Size";
+"Elapsed" = "Elapsed";
+"seconds" = "s";
+"Archive ID" = "Archive ID";
+"Backup Failed" = "Backup Failed";
+
+/* ── Restore Sheet ── */
+"Restore Backup" = "Restore Backup";
+"Target Archive" = "Target Archive";
+"Create snapshot before restore (strongly recommended)" = "Create snapshot before restore (strongly recommended)";
+"Automatically backs up current OpenClaw data. Recoverable if restore fails." = "Automatically backs up current OpenClaw data. Recoverable if restore fails.";
+"Complete all three steps below to proceed" = "Complete all three steps below to proceed";
+"I understand this will overwrite the current OpenClaw data directory and cannot be undone." = "I understand this will overwrite the current OpenClaw data directory and cannot be undone.";
+"I understand all unbacked data will be permanently overwritten and cannot be recovered." = "I understand all unbacked data will be permanently overwritten and cannot be recovered.";
+"Type RESTORE below to confirm" = "Type RESTORE below to confirm";
+"Type RESTORE" = "Type RESTORE";
+"Restoring..." = "Restoring...";
+"Start Restore" = "Start Restore";
+"Restoring, please wait..." = "Restoring, please wait...";
+"Restore Succeeded" = "Restore Succeeded";
+"Files Overwritten" = "Files Overwritten";
+"Pre-restore Snapshot" = "Pre-restore Snapshot";
+"The following files failed to restore:" = "The following files failed to restore:";
+"...and %d more failed" = "...and %d more failed";
+"Restore Failed" = "Restore Failed";
+"Final Confirmation: Proceed with Restore?" = "Final Confirmation: Proceed with Restore?";
+"This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?" = "This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?";
+"Restore Now" = "Restore Now";
+
+/* ── Export Sheet ── */
+"Export Archive" = "Export Archive";
+"Archive" = "Archive";
+"Format" = "Format";
+"Compression Level" = "Compression Level";
+"Exporting..." = "Exporting...";
+"Choose Location & Export" = "Choose Location & Export";
+"Compressing, please wait..." = "Compressing, please wait...";
+"Export Succeeded" = "Export Succeeded";
+"File Size" = "File Size";
+"Output Path" = "Output Path";
+"Show in Finder" = "Show in Finder";
+"Export Failed" = "Export Failed";
+"Choose Export Location" = "Choose Export Location";
+
+/* ── Preview ── */
+"File Structure" = "File Structure";
+"Loading..." = "Loading...";
+"Cannot Load Directory" = "Cannot Load Directory";
+"Backup is Empty" = "Backup is Empty";
+"This backup contains no files" = "This backup contains no files";
+"File Preview" = "File Preview";
+"Reading..." = "Reading...";
+"Cannot Preview" = "Cannot Preview";
+"No File Selected" = "No File Selected";
+"Select a file from the tree to preview" = "Select a file from the tree to preview";
+"Export" = "Export";
+"Export as Archive" = "Export as Archive";
+"Restore" = "Restore";
+"Restore this backup to OpenClaw data directory" = "Restore this backup to OpenClaw data directory";
+"Size" = "Size";
+"Type" = "Type";
+"Status" = "Status";
+"Success" = "Success";
+"Failed" = "Failed";
+
+/* ── Settings - General ── */
 "General" = "General";
 "OpenClaw Path" = "OpenClaw Path";
-"State Directory" = "State Directory";
 "Reset to Default" = "Reset to Default";
 "Detected Version" = "Detected Version";
 "Behavior" = "Behavior";
 "Auto-refresh on Launch" = "Auto-refresh on Launch";
 
-/* Settings - Storage */
+/* ── Settings - Storage ── */
 "Storage" = "Storage";
 "Backup Storage Location" = "Backup Storage Location";
 "Path" = "Path";
@@ -16,16 +132,16 @@
 "Disk Usage" = "Disk Usage";
 "Calculating..." = "Calculating...";
 
-/* Settings - Appearance */
+/* ── Settings - Appearance ── */
 "Appearance" = "Appearance";
 "System" = "System";
 "Light" = "Light";
 "Dark" = "Dark";
 
-/* Settings - Language */
+/* ── Settings - Language ── */
 "Language" = "Language";
 
-/* Settings - About */
+/* ── Settings - About ── */
 "About" = "About";
 "Version" = "Version";
 "Author" = "Author";
