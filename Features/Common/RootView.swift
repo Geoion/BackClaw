@@ -4,6 +4,8 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var archiveStore: ArchiveStore
     @State private var showBackupSheet = false
+    @State private var showExportSheet = false
+    @State private var showRestoreSheet = false
     @State private var isImporting = false
     @State private var importError: String?
     @State private var showImportError = false
@@ -11,13 +13,17 @@ struct RootView: View {
 
     private let importService = ImportService()
 
+    private var selectedArchive: BackupArchive? {
+        archiveStore.archives.first(where: { $0.id == selectedArchiveID })
+    }
+
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
             ArchiveSidebarView(selectedArchiveID: $selectedArchiveID)
                 .navigationSplitViewColumnWidth(min: 200, ideal: 360, max: 600)
         } detail: {
-            if let selected = archiveStore.archives.first(where: { $0.id == selectedArchiveID }) {
-                ArchivePreviewView(archive: selected)
+            if let archive = selectedArchive {
+                ArchivePreviewView(archive: archive)
                     .environmentObject(archiveStore)
             } else {
                 EmptyDetailView()
@@ -27,48 +33,71 @@ struct RootView: View {
         .frame(minWidth: 960, minHeight: 640)
         .toolbar(id: "mainToolbar") {
             ToolbarItem(id: "refresh", placement: .primaryAction) {
-                Button {
+                ToolbarButton(title: L("Refresh"), systemImage: "arrow.clockwise") {
                     archiveStore.refresh()
-                } label: {
-                    Label("刷新", systemImage: "arrow.clockwise")
                 }
-                .help("刷新备份列表")
+                .help(L("Refresh backup list"))
             }
+
             ToolbarItem(id: "import", placement: .primaryAction) {
-                Button {
+                ToolbarButton(
+                    title: isImporting ? L("Importing...") : L("Import Backup"),
+                    systemImage: "square.and.arrow.down",
+                    isLoading: isImporting
+                ) {
                     pickImportFile()
-                } label: {
-                    if isImporting {
-                        HStack(spacing: 4) {
-                            ProgressView().controlSize(.small)
-                            Text("导入中…")
-                        }
-                    } else {
-                        Label("导入备份", systemImage: "square.and.arrow.down")
-                    }
                 }
                 .disabled(isImporting)
-                .help("从 tar.gz 或 zip 文件导入备份")
+                .help(L("Import a backup from tar.gz or zip"))
             }
-            ToolbarItem(id: "backup", placement: .primaryAction) {
-                Button {
-                    showBackupSheet = true
-                } label: {
-                    Label("立即备份", systemImage: "externaldrive.badge.plus")
+
+            ToolbarItem(id: "export", placement: .primaryAction) {
+                ToolbarButton(title: L("Export"), systemImage: "square.and.arrow.up") {
+                    showExportSheet = true
                 }
-                .buttonStyle(.borderedProminent)
+                .disabled(selectedArchive == nil)
+                .help(L("Export as Archive"))
+            }
+
+            ToolbarItem(id: "restore", placement: .primaryAction) {
+                ToolbarButton(title: L("Restore"), systemImage: "arrow.counterclockwise") {
+                    showRestoreSheet = true
+                }
+                .disabled(selectedArchive == nil)
+                .help(L("Restore this backup to OpenClaw data directory"))
+            }
+
+            ToolbarItem(id: "backup", placement: .primaryAction) {
+                ToolbarButton(
+                    title: L("Backup Now"),
+                    systemImage: "externaldrive.badge.plus",
+                    isProminent: true
+                ) {
+                    showBackupSheet = true
+                }
                 .keyboardShortcut("b", modifiers: [.command, .shift])
-                .help("立即备份（⇧⌘B）")
+                .help(L("Backup Now Shortcut Help"))
             }
         }
         .sheet(isPresented: $showBackupSheet) {
             BackupSheetView(isPresented: $showBackupSheet)
                 .environmentObject(archiveStore)
         }
-        .alert("导入失败", isPresented: $showImportError) {
-            Button("确定", role: .cancel) {}
+        .sheet(isPresented: $showExportSheet) {
+            if let archive = selectedArchive {
+                ExportSheetView(archive: archive, isPresented: $showExportSheet)
+            }
+        }
+        .sheet(isPresented: $showRestoreSheet) {
+            if let archive = selectedArchive {
+                RestoreSheetView(archive: archive, isPresented: $showRestoreSheet)
+                    .environmentObject(archiveStore)
+            }
+        }
+        .alert(L("Import Failed"), isPresented: $showImportError) {
+            Button(L("OK"), role: .cancel) {}
         } message: {
-            Text(importError ?? "未知错误")
+            Text(importError ?? L("Unknown Error"))
         }
         .onAppear {
             archiveStore.refresh()
@@ -87,8 +116,8 @@ struct RootView: View {
 
     private func pickImportFile() {
         let panel = NSOpenPanel()
-        panel.title = "选择备份文件"
-        panel.message = "选择 BackClaw 导出的 .tar.gz 或 .zip 文件"
+        panel.title = L("Select Backup File")
+        panel.message = L("Select a .tar.gz or .zip exported by BackClaw")
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
@@ -107,6 +136,40 @@ struct RootView: View {
                 importError = error.localizedDescription
                 showImportError = true
                 isImporting = false
+            }
+        }
+    }
+}
+
+// MARK: - ToolbarButton
+
+private struct ToolbarButton: View {
+    let title: String
+    let systemImage: String
+    var isLoading: Bool = false
+    var isProminent: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        if isProminent {
+            Button(action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.borderedProminent)
+        } else {
+            Button(action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.bordered)
+        }
+    }
+
+    private var label: some View {
+        Label {
+            Text(title)
+        } icon: {
+            if isLoading {
+                ProgressView().controlSize(.small)
+            } else {
+                Image(systemName: systemImage)
             }
         }
     }
