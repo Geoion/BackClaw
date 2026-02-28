@@ -1,13 +1,129 @@
-/* Settings - General */
+/* ── Toolbar ── */
+"Refresh" = "重新整理";
+"Refresh backup list" = "重新整理備份清單";
+"Importing..." = "匯入中…";
+"Import Backup" = "匯入備份";
+"Import a backup from tar.gz or zip" = "從 tar.gz 或 zip 檔案匯入備份";
+"Backup Now" = "立即備份";
+"Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
+
+/* ── Alerts ── */
+"Import Failed" = "匯入失敗";
+"OK" = "確定";
+"Unknown Error" = "未知錯誤";
+
+/* ── File Panel ── */
+"Select Backup File" = "選擇備份檔案";
+"Select a .tar.gz or .zip exported by BackClaw" = "選擇 BackClaw 匯出的 .tar.gz 或 .zip 檔案";
+"Select" = "選擇";
+
+/* ── Sidebar ── */
+"Backup Records" = "備份記錄";
+"No Backups" = "尚無備份";
+"Click \"Backup Now\" in the toolbar to create your first backup" = "點選工具列「立即備份」建立第一個備份";
+"files" = "個檔案";
+
+/* ── Empty Detail ── */
+"No Backup Selected" = "未選擇備份";
+"Select a backup from the list to view details" = "從左側清單選擇一個備份以查看詳情";
+
+/* ── Backup Sheet ── */
+"Backup Now Title" = "立即備份";
+"State Directory" = "State 目錄";
+"Contains configs, credentials, sessions and all agent data." = "包含設定、憑證、sessions 及所有 agent 資料。";
+"Customize" = "自訂";
+"State Directory Path" = "State 目錄路徑";
+"Choose..." = "選擇…";
+"Reset" = "重置";
+"Workspace Directory" = "Workspace 目錄";
+"Contains memory and skill files. Each agent has its own workspace in multi-agent setups." = "包含記憶、技能檔案。多 agent 場景下每個 agent 有獨立 workspace。";
+"Add Workspace Path..." = "新增 Workspace 路徑…";
+"Browse..." = "瀏覽…";
+"Add" = "新增";
+"Backup Label (Optional)" = "備份標籤（選填）";
+"Appended to archive ID. Letters, numbers, hyphens only." = "附加到存檔 ID 末尾，僅支援字母、數字、連字號。";
+"e.g. upgrade-before-v2" = "例如：upgrade-before-v2";
+"Cancel" = "取消";
+"Backing Up..." = "備份中…";
+"Start Backup" = "開始備份";
+"Backing up, please wait..." = "正在備份，請稍候…";
+"Backup Succeeded" = "備份成功";
+"OpenClaw Version" = "OpenClaw 版本";
+"File Count" = "檔案數";
+"Backup Size" = "備份大小";
+"Elapsed" = "耗時";
+"seconds" = "秒";
+"Archive ID" = "存檔 ID";
+"Backup Failed" = "備份失敗";
+
+/* ── Restore Sheet ── */
+"Restore Backup" = "還原備份";
+"Target Archive" = "目標存檔";
+"Create snapshot before restore (strongly recommended)" = "還原前建立快照（強烈建議）";
+"Automatically backs up current OpenClaw data. Recoverable if restore fails." = "自動備份目前 OpenClaw 資料，還原失敗時可從快照復原";
+"Complete all three steps below to proceed" = "請完成以下三步確認才能執行還原";
+"I understand this will overwrite the current OpenClaw data directory and cannot be undone." = "我了解此操作將覆蓋目前 OpenClaw 資料目錄，操作不可撤銷。";
+"I understand all unbacked data will be permanently overwritten and cannot be recovered." = "我了解還原後目前所有未備份的資料將被永久覆蓋，無法復原。";
+"Type RESTORE below to confirm" = "在下方輸入 RESTORE 以最終確認";
+"Type RESTORE" = "輸入 RESTORE";
+"Restoring..." = "還原中…";
+"Start Restore" = "開始還原";
+"Restoring, please wait..." = "正在還原，請稍候…";
+"Restore Succeeded" = "還原成功";
+"Files Overwritten" = "覆蓋檔案數";
+"Pre-restore Snapshot" = "還原前快照";
+"The following files failed to restore:" = "以下檔案還原失敗：";
+"...and %d more failed" = "…還有 %d 個檔案失敗";
+"Restore Failed" = "還原失敗";
+"Final Confirmation: Proceed with Restore?" = "最終確認：執行還原？";
+"This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?" = "此操作將立即覆蓋 OpenClaw 資料目錄（%@），無法撤銷。\n\n確認繼續？";
+"Restore Now" = "立即還原";
+
+/* ── Export Sheet ── */
+"Export Archive" = "匯出壓縮檔";
+"Archive" = "存檔";
+"Format" = "格式";
+"Compression Level" = "壓縮等級";
+"Exporting..." = "匯出中…";
+"Choose Location & Export" = "選擇位置並匯出";
+"Compressing, please wait..." = "正在壓縮，請稍候…";
+"Export Succeeded" = "匯出成功";
+"File Size" = "檔案大小";
+"Output Path" = "輸出路徑";
+"Show in Finder" = "在 Finder 中顯示";
+"Export Failed" = "匯出失敗";
+"Choose Export Location" = "選擇匯出位置";
+
+/* ── Preview ── */
+"File Structure" = "檔案結構";
+"Loading..." = "載入中…";
+"Cannot Load Directory" = "無法載入目錄";
+"Backup is Empty" = "備份內容為空";
+"This backup contains no files" = "此備份不包含任何檔案";
+"File Preview" = "檔案預覽";
+"Reading..." = "讀取中…";
+"Cannot Preview" = "無法預覽";
+"No File Selected" = "未選擇檔案";
+"Select a file from the tree to preview" = "從左側目錄樹選擇一個檔案進行預覽";
+"Export" = "匯出";
+"Export as Archive" = "匯出為壓縮檔";
+"Restore" = "還原";
+"Restore this backup to OpenClaw data directory" = "將此備份還原到 OpenClaw 資料目錄";
+"Size" = "大小";
+"Type" = "類型";
+"Status" = "狀態";
+"Success" = "成功";
+"Failed" = "失敗";
+
+/* ── Settings - General ── */
 "General" = "一般";
 "OpenClaw Path" = "OpenClaw 路徑";
-"State Directory" = "State 目錄";
 "Reset to Default" = "重置為預設";
 "Detected Version" = "偵測到的版本";
 "Behavior" = "行為";
 "Auto-refresh on Launch" = "啟動時自動重新整理備份清單";
 
-/* Settings - Storage */
+/* ── Settings - Storage ── */
 "Storage" = "儲存";
 "Backup Storage Location" = "備份儲存位置";
 "Path" = "路徑";
@@ -16,16 +132,16 @@
 "Disk Usage" = "佔用空間";
 "Calculating..." = "計算中…";
 
-/* Settings - Appearance */
+/* ── Settings - Appearance ── */
 "Appearance" = "外觀";
 "System" = "跟隨系統";
 "Light" = "淺色";
 "Dark" = "深色";
 
-/* Settings - Language */
+/* ── Settings - Language ── */
 "Language" = "語言";
 
-/* Settings - About */
+/* ── Settings - About ── */
 "About" = "關於";
 "Version" = "版本";
 "Author" = "作者";
