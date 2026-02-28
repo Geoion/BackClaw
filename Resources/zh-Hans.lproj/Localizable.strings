@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "通用";
+"OpenClaw Path" = "OpenClaw 路径";
+"State Directory" = "State 目录";
+"Reset to Default" = "重置为默认";
+"Detected Version" = "检测到的版本";
+"Behavior" = "行为";
+"Auto-refresh on Launch" = "启动时自动刷新备份列表";
+
+/* Settings - Storage */
+"Storage" = "存储";
+"Backup Storage Location" = "备份存储位置";
+"Path" = "路径";
+"Backup Count" = "备份数量";
+"archives" = "个存档";
+"Disk Usage" = "占用空间";
+"Calculating..." = "计算中…";
+
+/* Settings - Appearance */
+"Appearance" = "外观";
+"System" = "跟随系统";
+"Light" = "浅色";
+"Dark" = "深色";
+
+/* Settings - Language */
+"Language" = "语言";
+
+/* Settings - About */
+"About" = "关于";
+"Version" = "版本";
+"Author" = "作者";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "OpenClaw 备份与还原工具";
