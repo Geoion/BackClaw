@@ -1,31 +1,139 @@
-/* Settings - General */
+/* ── Toolbar ── */
+"Refresh" = "Aggiorna";
+"Refresh backup list" = "Aggiorna elenco backup";
+"Importing..." = "Importazione…";
+"Import Backup" = "Importa backup";
+"Import a backup from tar.gz or zip" = "Importa un backup da file tar.gz o zip";
+"Backup Now" = "Esegui backup ora";
+"Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
+
+/* ── Alerts ── */
+"Import Failed" = "Importazione non riuscita";
+"OK" = "OK";
+"Unknown Error" = "Errore sconosciuto";
+
+/* ── File Panel ── */
+"Select Backup File" = "Seleziona file di backup";
+"Select a .tar.gz or .zip exported by BackClaw" = "Seleziona un file .tar.gz o .zip esportato da BackClaw";
+"Select" = "Seleziona";
+
+/* ── Sidebar ── */
+"Backup Records" = "Cronologia backup";
+"No Backups" = "Nessun backup";
+"Click \"Backup Now\" in the toolbar to create your first backup" = "Clicca su «Esegui backup ora» nella barra degli strumenti per creare il primo backup";
+"files" = "file";
+
+/* ── Empty Detail ── */
+"No Backup Selected" = "Nessun backup selezionato";
+"Select a backup from the list to view details" = "Seleziona un backup dall'elenco per visualizzare i dettagli";
+
+/* ── Backup Sheet ── */
+"Backup Now Title" = "Esegui backup ora";
+"State Directory" = "Directory State";
+"Contains configs, credentials, sessions and all agent data." = "Contiene configurazioni, credenziali, sessioni e tutti i dati degli agenti.";
+"Customize" = "Personalizza";
+"State Directory Path" = "Percorso directory State";
+"Choose..." = "Scegli…";
+"Reset" = "Ripristina";
+"Workspace Directory" = "Directory Workspace";
+"Contains memory and skill files. Each agent has its own workspace in multi-agent setups." = "Contiene file di memoria e competenze. In configurazioni multi-agente, ogni agente ha il proprio workspace.";
+"Add Workspace Path..." = "Aggiungi percorso Workspace…";
+"Browse..." = "Sfoglia…";
+"Add" = "Aggiungi";
+"Backup Label (Optional)" = "Etichetta backup（opzionale）";
+"Appended to archive ID. Letters, numbers, hyphens only." = "Aggiunta all'ID archivio. Solo lettere, numeri e trattini.";
+"e.g. upgrade-before-v2" = "es. upgrade-before-v2";
+"Cancel" = "Annulla";
+"Backing Up..." = "Backup in corso…";
+"Start Backup" = "Avvia backup";
+"Backing up, please wait..." = "Backup in corso, attendere…";
+"Backup Succeeded" = "Backup completato";
+"OpenClaw Version" = "Versione OpenClaw";
+"File Count" = "Numero file";
+"Backup Size" = "Dimensione backup";
+"Elapsed" = "Tempo trascorso";
+"seconds" = "s";
+"Archive ID" = "ID archivio";
+"Backup Failed" = "Backup non riuscito";
+
+/* ── Restore Sheet ── */
+"Restore Backup" = "Ripristina backup";
+"Target Archive" = "Archivio di destinazione";
+"Create snapshot before restore (strongly recommended)" = "Crea snapshot prima del ripristino（fortemente consigliato）";
+"Automatically backs up current OpenClaw data. Recoverable if restore fails." = "Esegue automaticamente il backup dei dati OpenClaw attuali. Recuperabile in caso di errore.";
+"Complete all three steps below to proceed" = "Completa i tre passaggi seguenti per procedere";
+"I understand this will overwrite the current OpenClaw data directory and cannot be undone." = "Comprendo che questa operazione sovrascriverà la directory dati OpenClaw attuale e non potrà essere annullata.";
+"I understand all unbacked data will be permanently overwritten and cannot be recovered." = "Comprendo che tutti i dati non salvati saranno sovrascritti definitivamente e non potranno essere recuperati.";
+"Type RESTORE below to confirm" = "Digita RESTORE di seguito per confermare";
+"Type RESTORE" = "Digita RESTORE";
+"Restoring..." = "Ripristino in corso…";
+"Start Restore" = "Avvia ripristino";
+"Restoring, please wait..." = "Ripristino in corso, attendere…";
+"Restore Succeeded" = "Ripristino completato";
+"Files Overwritten" = "File sovrascritti";
+"Pre-restore Snapshot" = "Snapshot pre-ripristino";
+"The following files failed to restore:" = "I seguenti file non sono stati ripristinati:";
+"...and %d more failed" = "…e altri %d non riusciti";
+"Restore Failed" = "Ripristino non riuscito";
+"Final Confirmation: Proceed with Restore?" = "Conferma finale: procedere con il ripristino?";
+"This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?" = "Questa operazione sovrascriverà immediatamente la directory dati OpenClaw（%@）. Non potrà essere annullata.\n\nContinuare?";
+"Restore Now" = "Ripristina ora";
+
+/* ── Export Sheet ── */
+"Export Archive" = "Esporta archivio";
+"Archive" = "Archivio";
+"Format" = "Formato";
+"Compression Level" = "Livello di compressione";
+"Exporting..." = "Esportazione…";
+"Choose Location & Export" = "Scegli posizione ed esporta";
+"Compressing, please wait..." = "Compressione in corso, attendere…";
+"Export Succeeded" = "Esportazione completata";
+"File Size" = "Dimensione file";
+"Output Path" = "Percorso output";
+"Show in Finder" = "Mostra nel Finder";
+"Export Failed" = "Esportazione non riuscita";
+"Choose Export Location" = "Scegli posizione di esportazione";
+
+/* ── Preview ── */
+"File Structure" = "Struttura file";
+"Loading..." = "Caricamento…";
+"Cannot Load Directory" = "Impossibile caricare la directory";
+"Backup is Empty" = "Il backup è vuoto";
+"This backup contains no files" = "Questo backup non contiene file";
+"File Preview" = "Anteprima file";
+"Reading..." = "Lettura…";
+"Cannot Preview" = "Anteprima non disponibile";
+"No File Selected" = "Nessun file selezionato";
+"Select a file from the tree to preview" = "Seleziona un file dall'albero per l'anteprima";
+"Export" = "Esporta";
+"Export as Archive" = "Esporta come archivio";
+"Restore" = "Ripristina";
+"Restore this backup to OpenClaw data directory" = "Ripristina questo backup nella directory dati OpenClaw";
+"Size" = "Dimensione";
+"Type" = "Tipo";
+"Status" = "Stato";
+"Success" = "Riuscito";
+"Failed" = "Non riuscito";
+
+/* ── Settings ── */
 "General" = "Generale";
 "OpenClaw Path" = "Percorso OpenClaw";
-"State Directory" = "Directory State";
 "Reset to Default" = "Ripristina predefinito";
 "Detected Version" = "Versione rilevata";
 "Behavior" = "Comportamento";
 "Auto-refresh on Launch" = "Aggiorna automaticamente l'elenco backup all'avvio";
-
-/* Settings - Storage */
 "Storage" = "Archiviazione";
-"Backup Storage Location" = "Posizione di archiviazione backup";
+"Backup Storage Location" = "Posizione archiviazione backup";
 "Path" = "Percorso";
 "Backup Count" = "Numero di backup";
 "archives" = "archivi";
 "Disk Usage" = "Utilizzo disco";
-"Calculating..." = "Calcolo in corso…";
-
-/* Settings - Appearance */
+"Calculating..." = "Calcolo…";
 "Appearance" = "Aspetto";
 "System" = "Sistema";
 "Light" = "Chiaro";
 "Dark" = "Scuro";
-
-/* Settings - Language */
 "Language" = "Lingua";
-
-/* Settings - About */
 "About" = "Informazioni";
 "Version" = "Versione";
 "Author" = "Autore";
