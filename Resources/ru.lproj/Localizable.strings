@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "Основные";
+"OpenClaw Path" = "Путь к OpenClaw";
+"State Directory" = "Директория State";
+"Reset to Default" = "Сбросить до умолчания";
+"Detected Version" = "Обнаруженная версия";
+"Behavior" = "Поведение";
+"Auto-refresh on Launch" = "Автообновление списка резервных копий при запуске";
+
+/* Settings - Storage */
+"Storage" = "Хранилище";
+"Backup Storage Location" = "Расположение резервных копий";
+"Path" = "Путь";
+"Backup Count" = "Количество резервных копий";
+"archives" = "архивов";
+"Disk Usage" = "Использование диска";
+"Calculating..." = "Вычисление…";
+
+/* Settings - Appearance */
+"Appearance" = "Оформление";
+"System" = "Системная";
+"Light" = "Светлая";
+"Dark" = "Тёмная";
+
+/* Settings - Language */
+"Language" = "Язык";
+
+/* Settings - About */
+"About" = "О приложении";
+"Version" = "Версия";
+"Author" = "Автор";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "Инструмент резервного копирования и восстановления OpenClaw";
