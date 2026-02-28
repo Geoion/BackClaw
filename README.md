@@ -2,11 +2,7 @@
 
 A simple, safe, and traceable local backup & restore tool for [OpenClaw](https://github.com/openclaw/openclaw) — built natively for macOS with Swift and SwiftUI.
 
-## Screenshots
-
 ![Screenshots](images/screenshots.png)
-
----
 
 ## Features
 
