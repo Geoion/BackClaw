@@ -14,8 +14,7 @@ struct ExportSheetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            // 标题
-            Text("导出压缩包")
+            Text(L("Export Archive"))
                 .font(.title2).bold()
                 .padding(.horizontal, 24)
                 .padding(.top, 22)
@@ -25,8 +24,7 @@ struct ExportSheetView: View {
 
             VStack(alignment: .leading, spacing: 18) {
 
-                // 存档信息
-                SectionBlock(title: "存档") {
+                SectionBlock(title: L("Archive")) {
                     HStack(spacing: 8) {
                         Image(systemName: "archivebox")
                             .foregroundStyle(.secondary)
@@ -34,15 +32,14 @@ struct ExportSheetView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(archive.meta.archiveId)
                                 .font(.system(.subheadline, design: .monospaced))
-                            Text("\(archive.meta.fileCount) 个文件 · \(Formatters.byteCount(archive.meta.sizeBytes))")
+                            Text("\(archive.meta.fileCount) \(L("files")) · \(Formatters.byteCount(archive.meta.sizeBytes))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 }
 
-                // 格式选择
-                SectionBlock(title: "格式") {
+                SectionBlock(title: L("Format")) {
                     HStack(spacing: 10) {
                         ForEach(ExportFormat.allCases) { fmt in
                             FormatButton(
@@ -55,8 +52,7 @@ struct ExportSheetView: View {
                     }
                 }
 
-                // 压缩级别
-                SectionBlock(title: "压缩级别") {
+                SectionBlock(title: L("Compression Level")) {
                     Picker("", selection: $compressionLevel) {
                         ForEach(CompressionLevel.allCases) { level in
                             Text(level.displayName).tag(level)
@@ -66,7 +62,6 @@ struct ExportSheetView: View {
                     .disabled(phase == .exporting)
                 }
 
-                // 结果区
                 if phase != .idle {
                     phaseView
                 }
@@ -77,10 +72,9 @@ struct ExportSheetView: View {
             Spacer(minLength: 0)
             Divider()
 
-            // 底部按钮
             HStack {
                 Spacer()
-                Button("取消") { isPresented = false }
+                Button(L("Cancel")) { isPresented = false }
                     .disabled(phase == .exporting)
                     .keyboardShortcut(.escape, modifiers: [])
 
@@ -90,10 +84,10 @@ struct ExportSheetView: View {
                     if phase == .exporting {
                         HStack(spacing: 6) {
                             ProgressView().controlSize(.small)
-                            Text("导出中…")
+                            Text(L("Exporting..."))
                         }
                     } else {
-                        Label("选择位置并导出", systemImage: "square.and.arrow.up")
+                        Label(L("Choose Location & Export"), systemImage: "square.and.arrow.up")
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -118,7 +112,7 @@ struct ExportSheetView: View {
         case .exporting:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
-                Text("正在压缩，请稍候…").foregroundStyle(.secondary).font(.subheadline)
+                Text(L("Compressing, please wait...")).foregroundStyle(.secondary).font(.subheadline)
             }
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -126,20 +120,20 @@ struct ExportSheetView: View {
 
         case .success(let result):
             VStack(alignment: .leading, spacing: 10) {
-                Label("导出成功", systemImage: "checkmark.circle.fill")
+                Label(L("Export Succeeded"), systemImage: "checkmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.green)
 
                 Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
                     GridRow {
-                        Text("文件大小").foregroundStyle(.secondary)
+                        Text(L("File Size")).foregroundStyle(.secondary)
                         Text(Formatters.byteCount(result.sizeBytes))
                     }
                     GridRow {
-                        Text("耗时").foregroundStyle(.secondary)
-                        Text(String(format: "%.2f 秒", result.elapsed))
+                        Text(L("Elapsed")).foregroundStyle(.secondary)
+                        Text(String(format: "%.2f \(L("seconds"))", result.elapsed))
                     }
                     GridRow {
-                        Text("输出路径").foregroundStyle(.secondary)
+                        Text(L("Output Path")).foregroundStyle(.secondary)
                         Text(result.outputURL.path)
                             .font(.system(.caption, design: .monospaced))
                             .lineLimit(2)
@@ -151,7 +145,7 @@ struct ExportSheetView: View {
                 Button {
                     NSWorkspace.shared.activateFileViewerSelecting([result.outputURL])
                 } label: {
-                    Label("在 Finder 中显示", systemImage: "folder")
+                    Label(L("Show in Finder"), systemImage: "folder")
                 }
                 .buttonStyle(.link)
                 .font(.subheadline)
@@ -163,7 +157,7 @@ struct ExportSheetView: View {
 
         case .failure(let message):
             VStack(alignment: .leading, spacing: 6) {
-                Label("导出失败", systemImage: "xmark.circle.fill")
+                Label(L("Export Failed"), systemImage: "xmark.circle.fill")
                     .font(.subheadline).bold().foregroundStyle(.red)
                 Text(message).font(.caption).foregroundStyle(.secondary)
             }
@@ -178,7 +172,7 @@ struct ExportSheetView: View {
 
     private func runExport() {
         let panel = NSSavePanel()
-        panel.title = "选择导出位置"
+        panel.title = L("Choose Export Location")
         panel.nameFieldStringValue = "\(archive.meta.archiveId).\(format.fileExtension)"
         panel.allowedContentTypes = format == .zip ? [.zip] : []
         panel.canCreateDirectories = true
@@ -193,15 +187,12 @@ struct ExportSheetView: View {
             outputDirectory: outputDir
         )
 
-        // 覆盖输出文件名（用户在 SavePanel 里可能改了名字）
         let finalOutputURL = outputURL
-
         phase = .exporting
 
         Task {
             do {
                 var result = try await service.export(request: request)
-                // 如果用户改了文件名，重命名产物
                 if result.outputURL != finalOutputURL {
                     try? FileManager.default.moveItem(at: result.outputURL, to: finalOutputURL)
                     let attrs = try? FileManager.default.attributesOfItem(atPath: finalOutputURL.path)
