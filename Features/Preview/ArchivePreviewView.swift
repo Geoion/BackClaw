@@ -7,8 +7,6 @@ struct ArchivePreviewView: View {
     @StateObject private var vm = ArchivePreviewViewModel()
     @State private var selectedFileURL: URL?
     @State private var sidebarWidth: CGFloat = 360
-    @State private var showExportSheet = false
-    @State private var showRestoreSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,31 +28,6 @@ struct ArchivePreviewView: View {
         }
         .navigationTitle(archive.meta.archiveId)
         .navigationSubtitle(Formatters.dateTime(archive.meta.createdAt))
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showExportSheet = true
-                } label: {
-                    Label("导出", systemImage: "square.and.arrow.up")
-                }
-                .help("导出为压缩包")
-            }
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showRestoreSheet = true
-                } label: {
-                    Label("还原", systemImage: "arrow.counterclockwise")
-                }
-                .help("将此备份还原到 OpenClaw 数据目录")
-            }
-        }
-        .sheet(isPresented: $showExportSheet) {
-            ExportSheetView(archive: archive, isPresented: $showExportSheet)
-        }
-        .sheet(isPresented: $showRestoreSheet) {
-            RestoreSheetView(archive: archive, isPresented: $showRestoreSheet)
-                .environmentObject(archiveStore)
-        }
         .onAppear {
             vm.reset()
             vm.loadTree(at: archive.payloadURL)
@@ -70,7 +43,7 @@ struct ArchivePreviewView: View {
     private var treePanel: some View {
         VStack(spacing: 0) {
             HStack {
-                Label("文件结构", systemImage: "folder.badge.gearshape")
+                Label(L("File Structure"), systemImage: "folder.badge.gearshape")
                     .font(.subheadline).foregroundStyle(.secondary)
                 Spacer()
             }
@@ -80,12 +53,12 @@ struct ArchivePreviewView: View {
 
             if vm.isLoadingTree {
                 Spacer()
-                ProgressView("加载中…").padding()
+                ProgressView(L("Loading...")).padding()
                 Spacer()
             } else if let err = vm.treeError {
-                EmptyStateView(title: "无法加载目录", systemImage: "exclamationmark.triangle", description: err)
+                EmptyStateView(title: L("Cannot Load Directory"), systemImage: "exclamationmark.triangle", description: err)
             } else if vm.tree.isEmpty {
-                EmptyStateView(title: "备份内容为空", systemImage: "tray", description: "此备份不包含任何文件")
+                EmptyStateView(title: L("Backup is Empty"), systemImage: "tray", description: L("This backup contains no files"))
             } else {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 0, pinnedViews: []) {
@@ -109,7 +82,7 @@ struct ArchivePreviewView: View {
         VStack(spacing: 0) {
             HStack {
                 Label(
-                    selectedFileURL?.lastPathComponent ?? "文件预览",
+                    selectedFileURL?.lastPathComponent ?? L("File Preview"),
                     systemImage: "doc.text"
                 )
                 .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
@@ -121,14 +94,14 @@ struct ArchivePreviewView: View {
 
             if vm.isLoadingFile {
                 Spacer()
-                ProgressView("读取中…").padding()
+                ProgressView(L("Reading...")).padding()
                 Spacer()
             } else if let err = vm.previewError {
-                EmptyStateView(title: "无法预览", systemImage: "doc.questionmark", description: err)
+                EmptyStateView(title: L("Cannot Preview"), systemImage: "doc.questionmark", description: err)
             } else if let attributed = vm.highlightedContent {
                 CodeTextView(attributedText: attributed)
             } else {
-                EmptyStateView(title: "未选择文件", systemImage: "doc", description: "从左侧目录树选择一个文件进行预览")
+                EmptyStateView(title: L("No File Selected"), systemImage: "doc", description: L("Select a file from the tree to preview"))
             }
         }
     }
@@ -286,14 +259,14 @@ private struct MetaSummaryBar: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 24) {
-                MetaItem(icon: "doc.on.doc",    label: "文件数",        value: "\(archive.meta.fileCount)")
-                MetaItem(icon: "internaldrive", label: "大小",          value: Formatters.byteCount(archive.meta.sizeBytes))
-                MetaItem(icon: "shippingbox",   label: "OpenClaw 版本", value: archive.meta.openClawVersion)
-                MetaItem(icon: "tag",           label: "类型",          value: archive.meta.backupType.rawValue)
+                MetaItem(icon: "doc.on.doc",    label: L("File Count"),        value: "\(archive.meta.fileCount)")
+                MetaItem(icon: "internaldrive", label: L("Size"),               value: Formatters.byteCount(archive.meta.sizeBytes))
+                MetaItem(icon: "shippingbox",   label: L("OpenClaw Version"),   value: archive.meta.openClawVersion)
+                MetaItem(icon: "tag",           label: L("Type"),               value: archive.meta.backupType.rawValue)
                 MetaItem(
                     icon: archive.meta.status == .success ? "checkmark.circle.fill" : "xmark.circle.fill",
-                    label: "状态",
-                    value: archive.meta.status == .success ? "成功" : "失败",
+                    label: L("Status"),
+                    value: archive.meta.status == .success ? L("Success") : L("Failed"),
                     valueColor: archive.meta.status == .success ? .green : .red
                 )
                 Spacer()
