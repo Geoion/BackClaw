@@ -1,31 +1,139 @@
-/* Settings - General */
+/* ── Toolbar ── */
+"Refresh" = "Обновить";
+"Refresh backup list" = "Обновить список резервных копий";
+"Importing..." = "Импорт…";
+"Import Backup" = "Импортировать резервную копию";
+"Import a backup from tar.gz or zip" = "Импортировать резервную копию из файла tar.gz или zip";
+"Backup Now" = "Создать копию";
+"Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
+
+/* ── Alerts ── */
+"Import Failed" = "Ошибка импорта";
+"OK" = "ОК";
+"Unknown Error" = "Неизвестная ошибка";
+
+/* ── File Panel ── */
+"Select Backup File" = "Выберите файл резервной копии";
+"Select a .tar.gz or .zip exported by BackClaw" = "Выберите файл .tar.gz или .zip, экспортированный BackClaw";
+"Select" = "Выбрать";
+
+/* ── Sidebar ── */
+"Backup Records" = "История копий";
+"No Backups" = "Нет резервных копий";
+"Click \"Backup Now\" in the toolbar to create your first backup" = "Нажмите «Создать копию» на панели инструментов для создания первой копии";
+"files" = "файлов";
+
+/* ── Empty Detail ── */
+"No Backup Selected" = "Копия не выбрана";
+"Select a backup from the list to view details" = "Выберите копию из списка для просмотра деталей";
+
+/* ── Backup Sheet ── */
+"Backup Now Title" = "Создать копию";
+"State Directory" = "Директория State";
+"Contains configs, credentials, sessions and all agent data." = "Содержит конфигурации, учётные данные, сессии и все данные агентов.";
+"Customize" = "Настроить";
+"State Directory Path" = "Путь к директории State";
+"Choose..." = "Выбрать…";
+"Reset" = "Сбросить";
+"Workspace Directory" = "Директория Workspace";
+"Contains memory and skill files. Each agent has its own workspace in multi-agent setups." = "Содержит файлы памяти и навыков. В мультиагентной среде у каждого агента свой workspace.";
+"Add Workspace Path..." = "Добавить путь Workspace…";
+"Browse..." = "Обзор…";
+"Add" = "Добавить";
+"Backup Label (Optional)" = "Метка копии（необязательно）";
+"Appended to archive ID. Letters, numbers, hyphens only." = "Добавляется к ID архива. Только буквы, цифры и дефисы.";
+"e.g. upgrade-before-v2" = "например: upgrade-before-v2";
+"Cancel" = "Отмена";
+"Backing Up..." = "Создание копии…";
+"Start Backup" = "Начать резервное копирование";
+"Backing up, please wait..." = "Создание копии, подождите…";
+"Backup Succeeded" = "Копия создана";
+"OpenClaw Version" = "Версия OpenClaw";
+"File Count" = "Количество файлов";
+"Backup Size" = "Размер копии";
+"Elapsed" = "Затрачено";
+"seconds" = "с";
+"Archive ID" = "ID архива";
+"Backup Failed" = "Ошибка резервного копирования";
+
+/* ── Restore Sheet ── */
+"Restore Backup" = "Восстановить копию";
+"Target Archive" = "Целевой архив";
+"Create snapshot before restore (strongly recommended)" = "Создать снимок перед восстановлением（настоятельно рекомендуется）";
+"Automatically backs up current OpenClaw data. Recoverable if restore fails." = "Автоматически сохраняет текущие данные OpenClaw. Можно восстановить при ошибке.";
+"Complete all three steps below to proceed" = "Выполните все три шага для продолжения";
+"I understand this will overwrite the current OpenClaw data directory and cannot be undone." = "Я понимаю, что эта операция перезапишет текущую директорию данных OpenClaw и не может быть отменена.";
+"I understand all unbacked data will be permanently overwritten and cannot be recovered." = "Я понимаю, что все данные без резервной копии будут безвозвратно перезаписаны.";
+"Type RESTORE below to confirm" = "Введите RESTORE ниже для окончательного подтверждения";
+"Type RESTORE" = "Введите RESTORE";
+"Restoring..." = "Восстановление…";
+"Start Restore" = "Начать восстановление";
+"Restoring, please wait..." = "Восстановление, подождите…";
+"Restore Succeeded" = "Восстановление выполнено";
+"Files Overwritten" = "Перезаписано файлов";
+"Pre-restore Snapshot" = "Снимок до восстановления";
+"The following files failed to restore:" = "Следующие файлы не удалось восстановить:";
+"...and %d more failed" = "…и ещё %d не удалось";
+"Restore Failed" = "Ошибка восстановления";
+"Final Confirmation: Proceed with Restore?" = "Окончательное подтверждение: выполнить восстановление?";
+"This will immediately overwrite the OpenClaw data directory (%@). This cannot be undone.\n\nContinue?" = "Это немедленно перезапишет директорию данных OpenClaw（%@）. Отменить невозможно.\n\nПродолжить?";
+"Restore Now" = "Восстановить сейчас";
+
+/* ── Export Sheet ── */
+"Export Archive" = "Экспортировать архив";
+"Archive" = "Архив";
+"Format" = "Формат";
+"Compression Level" = "Уровень сжатия";
+"Exporting..." = "Экспорт…";
+"Choose Location & Export" = "Выбрать место и экспортировать";
+"Compressing, please wait..." = "Сжатие, подождите…";
+"Export Succeeded" = "Экспорт выполнен";
+"File Size" = "Размер файла";
+"Output Path" = "Путь вывода";
+"Show in Finder" = "Показать в Finder";
+"Export Failed" = "Ошибка экспорта";
+"Choose Export Location" = "Выбрать место экспорта";
+
+/* ── Preview ── */
+"File Structure" = "Структура файлов";
+"Loading..." = "Загрузка…";
+"Cannot Load Directory" = "Не удаётся загрузить директорию";
+"Backup is Empty" = "Копия пуста";
+"This backup contains no files" = "Эта копия не содержит файлов";
+"File Preview" = "Предпросмотр файла";
+"Reading..." = "Чтение…";
+"Cannot Preview" = "Предпросмотр недоступен";
+"No File Selected" = "Файл не выбран";
+"Select a file from the tree to preview" = "Выберите файл из дерева для предпросмотра";
+"Export" = "Экспорт";
+"Export as Archive" = "Экспортировать как архив";
+"Restore" = "Восстановить";
+"Restore this backup to OpenClaw data directory" = "Восстановить эту копию в директорию данных OpenClaw";
+"Size" = "Размер";
+"Type" = "Тип";
+"Status" = "Статус";
+"Success" = "Успешно";
+"Failed" = "Ошибка";
+
+/* ── Settings ── */
 "General" = "Основные";
 "OpenClaw Path" = "Путь к OpenClaw";
-"State Directory" = "Директория State";
 "Reset to Default" = "Сбросить до умолчания";
 "Detected Version" = "Обнаруженная версия";
 "Behavior" = "Поведение";
-"Auto-refresh on Launch" = "Автообновление списка резервных копий при запуске";
-
-/* Settings - Storage */
+"Auto-refresh on Launch" = "Автообновление списка копий при запуске";
 "Storage" = "Хранилище";
 "Backup Storage Location" = "Расположение резервных копий";
 "Path" = "Путь";
-"Backup Count" = "Количество резервных копий";
+"Backup Count" = "Количество копий";
 "archives" = "архивов";
 "Disk Usage" = "Использование диска";
 "Calculating..." = "Вычисление…";
-
-/* Settings - Appearance */
 "Appearance" = "Оформление";
 "System" = "Системная";
 "Light" = "Светлая";
 "Dark" = "Тёмная";
-
-/* Settings - Language */
 "Language" = "Язык";
-
-/* Settings - About */
 "About" = "О приложении";
 "Version" = "Версия";
 "Author" = "Автор";
