@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "一般";
+"OpenClaw Path" = "OpenClaw パス";
+"State Directory" = "State ディレクトリ";
+"Reset to Default" = "デフォルトにリセット";
+"Detected Version" = "検出されたバージョン";
+"Behavior" = "動作";
+"Auto-refresh on Launch" = "起動時にバックアップ一覧を自動更新";
+
+/* Settings - Storage */
+"Storage" = "ストレージ";
+"Backup Storage Location" = "バックアップ保存場所";
+"Path" = "パス";
+"Backup Count" = "バックアップ数";
+"archives" = "件";
+"Disk Usage" = "使用容量";
+"Calculating..." = "計算中…";
+
+/* Settings - Appearance */
+"Appearance" = "外観";
+"System" = "システム";
+"Light" = "ライト";
+"Dark" = "ダーク";
+
+/* Settings - Language */
+"Language" = "言語";
+
+/* Settings - About */
+"About" = "情報";
+"Version" = "バージョン";
+"Author" = "作者";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "OpenClaw バックアップ＆復元ツール";
