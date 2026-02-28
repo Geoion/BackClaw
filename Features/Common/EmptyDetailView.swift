@@ -3,9 +3,9 @@ import SwiftUI
 struct EmptyDetailView: View {
     var body: some View {
         EmptyStateView(
-            title: "未选择备份",
+            title: L("No Backup Selected"),
             systemImage: "archivebox",
-            description: "从左侧列表选择一个备份以查看详情"
+            description: L("Select a backup from the list to view details")
         )
     }
 }
