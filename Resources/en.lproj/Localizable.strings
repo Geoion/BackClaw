@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "General";
+"OpenClaw Path" = "OpenClaw Path";
+"State Directory" = "State Directory";
+"Reset to Default" = "Reset to Default";
+"Detected Version" = "Detected Version";
+"Behavior" = "Behavior";
+"Auto-refresh on Launch" = "Auto-refresh on Launch";
+
+/* Settings - Storage */
+"Storage" = "Storage";
+"Backup Storage Location" = "Backup Storage Location";
+"Path" = "Path";
+"Backup Count" = "Backup Count";
+"archives" = "archives";
+"Disk Usage" = "Disk Usage";
+"Calculating..." = "Calculating...";
+
+/* Settings - Appearance */
+"Appearance" = "Appearance";
+"System" = "System";
+"Light" = "Light";
+"Dark" = "Dark";
+
+/* Settings - Language */
+"Language" = "Language";
+
+/* Settings - About */
+"About" = "About";
+"Version" = "Version";
+"Author" = "Author";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "OpenClaw Backup & Restore Tool";
