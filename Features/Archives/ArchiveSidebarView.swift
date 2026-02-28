@@ -9,13 +9,13 @@ struct ArchiveSidebarView: View {
             ArchiveRowView(archive: archive)
                 .tag(archive.id)
         }
-        .navigationTitle("备份记录")
+        .navigationTitle(L("Backup Records"))
         .overlay {
             if archiveStore.archives.isEmpty {
                 EmptyStateView(
-                    title: "暂无备份",
+                    title: L("No Backups"),
                     systemImage: "archivebox",
-                    description: "点击工具栏「立即备份」创建第一个备份"
+                    description: L("Click \"Backup Now\" in the toolbar to create your first backup")
                 )
             }
         }
@@ -41,7 +41,7 @@ private struct ArchiveRowView: View {
 
             HStack(spacing: 10) {
                 Label(Formatters.byteCount(archive.meta.sizeBytes), systemImage: "internaldrive")
-                Label("\(archive.meta.fileCount) 个文件", systemImage: "doc.on.doc")
+                Label("\(archive.meta.fileCount) \(L("files"))", systemImage: "doc.on.doc")
                 if archive.meta.openClawVersion != "unknown" {
                     Label(archive.meta.openClawVersion, systemImage: "shippingbox")
                 }
