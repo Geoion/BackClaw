@@ -1,0 +1,33 @@
+/* Settings - General */
+"General" = "一般";
+"OpenClaw Path" = "OpenClaw 路徑";
+"State Directory" = "State 目錄";
+"Reset to Default" = "重置為預設";
+"Detected Version" = "偵測到的版本";
+"Behavior" = "行為";
+"Auto-refresh on Launch" = "啟動時自動重新整理備份清單";
+
+/* Settings - Storage */
+"Storage" = "儲存";
+"Backup Storage Location" = "備份儲存位置";
+"Path" = "路徑";
+"Backup Count" = "備份數量";
+"archives" = "個存檔";
+"Disk Usage" = "佔用空間";
+"Calculating..." = "計算中…";
+
+/* Settings - Appearance */
+"Appearance" = "外觀";
+"System" = "跟隨系統";
+"Light" = "淺色";
+"Dark" = "深色";
+
+/* Settings - Language */
+"Language" = "語言";
+
+/* Settings - About */
+"About" = "關於";
+"Version" = "版本";
+"Author" = "作者";
+"GitHub" = "GitHub";
+"OpenClaw Backup & Restore Tool" = "OpenClaw 備份與還原工具";
