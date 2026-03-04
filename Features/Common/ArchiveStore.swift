@@ -22,4 +22,13 @@ final class ArchiveStore: ObservableObject {
     func prepend(_ archive: BackupArchive) {
         archives.insert(archive, at: 0)
     }
+
+    func delete(_ archive: BackupArchive) {
+        do {
+            try repository.deleteArchive(archive)
+            archives.removeAll { $0.id == archive.id }
+        } catch {
+            latestError = error.localizedDescription
+        }
+    }
 }

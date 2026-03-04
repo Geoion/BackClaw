@@ -97,11 +97,11 @@ enum VersionCompatibility {
         case .same:
             return nil
         case .downgrade(let current, let backup):
-            return "当前 OpenClaw 版本（\(current)）高于备份版本（\(backup)）。还原后 state 格式可能不兼容，建议先备份当前状态再执行还原。"
+            return String(format: NSLocalizedString("Version Warning Downgrade", comment: ""), current, backup)
         case .upgrade(let current, let backup):
-            return "当前 OpenClaw 版本（\(current)）低于备份版本（\(backup)），还原后可能缺少新功能配置。"
+            return String(format: NSLocalizedString("Version Warning Upgrade", comment: ""), current, backup)
         case .unknown(let current, let backup):
-            return "无法比较版本（当前：\(current)，备份：\(backup)），请手动确认兼容性后再还原。"
+            return String(format: NSLocalizedString("Version Warning Unknown", comment: ""), current, backup)
         }
     }
 }

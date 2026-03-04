@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -65,27 +65,27 @@
 /* Begin PBXFileReference section */
 		06C960E8B5DD64EBB26DDC22 /* BackupSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSheetView.swift; sourceTree = "<group>"; };
 		106CA8D3E9B4143169ED77F4 /* BackupRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRepository.swift; sourceTree = "<group>"; };
-		1233B6D387198B6C7A3F76D4 /* de.lproj */ = {isa = PBXFileReference; path = de.lproj; sourceTree = "<group>"; };
+		1233B6D387198B6C7A3F76D4 /* de.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = de.lproj; sourceTree = "<group>"; };
 		127E70B76B4C8BCC03DD992C /* ExportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSheetView.swift; sourceTree = "<group>"; };
-		184E1A4989760715739C764D /* it.lproj */ = {isa = PBXFileReference; path = it.lproj; sourceTree = "<group>"; };
-		2FD707CAF8D635104F39BB3A /* zh-Hans.lproj */ = {isa = PBXFileReference; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
+		184E1A4989760715739C764D /* it.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = it.lproj; sourceTree = "<group>"; };
+		2FD707CAF8D635104F39BB3A /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
 		313C56C77FCCD4319817E294 /* BackupServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceTests.swift; sourceTree = "<group>"; };
-		32294B9CE0B49AE73A5BB2A5 /* ru.lproj */ = {isa = PBXFileReference; path = ru.lproj; sourceTree = "<group>"; };
+		32294B9CE0B49AE73A5BB2A5 /* ru.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ru.lproj; sourceTree = "<group>"; };
 		3CA74A8BE5241BCC8F7ABB15 /* ArchivePreviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePreviewService.swift; sourceTree = "<group>"; };
 		454620AE65F3919EE0263BEA /* ArchiveSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveSidebarView.swift; sourceTree = "<group>"; };
 		50955CDC4D070C2EF558AD34 /* BookmarkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkManager.swift; sourceTree = "<group>"; };
 		56EE6D149614551C523A1A27 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		57D91D4EE7D1C234ECBF0840 /* ko.lproj */ = {isa = PBXFileReference; path = ko.lproj; sourceTree = "<group>"; };
+		57D91D4EE7D1C234ECBF0840 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = "<group>"; };
 		64FC7689D66F3F18CB4C9893 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6E50E9E4E116694D86D20DB7 /* ja.lproj */ = {isa = PBXFileReference; path = ja.lproj; sourceTree = "<group>"; };
+		6E50E9E4E116694D86D20DB7 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = "<group>"; };
 		77A725C22D80BF635101B9B3 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		7D150525F8663F04FCFE2FC3 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
 		7D8FE7375213B8A7DC0CE3F1 /* RestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreService.swift; sourceTree = "<group>"; };
 		8C54C7E21489F4C41EE94770 /* BackupArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupArchive.swift; sourceTree = "<group>"; };
 		8E70A8B6591769EBAB6B7F1C /* BackClawApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackClawApp.swift; sourceTree = "<group>"; };
-		9558E3DF1B554A241552B4DA /* en.lproj */ = {isa = PBXFileReference; path = en.lproj; sourceTree = "<group>"; };
+		9558E3DF1B554A241552B4DA /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		9AE8E5B58EE372B3312EAC6D /* RestoreSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreSheetView.swift; sourceTree = "<group>"; };
-		9BD05A08C05E41208148875C /* zh-Hant.lproj */ = {isa = PBXFileReference; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
+		9BD05A08C05E41208148875C /* zh-Hant.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
 		9FC59D58A6AA062D0B6E1343 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9FE9EAE841A11A06F73241FA /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		A4E21EC051C5627BDD5B4352 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		C4F92BAD9536433A411DBC85 /* CodeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeTextView.swift; sourceTree = "<group>"; };
 		C6B629C9EFF1D940D45E7FB9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C6DECF18D6D1016404650A32 /* BackClaw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackClaw.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C97E01448ADE7D6ABBE70F2F /* es.lproj */ = {isa = PBXFileReference; path = es.lproj; sourceTree = "<group>"; };
+		C97E01448ADE7D6ABBE70F2F /* es.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = es.lproj; sourceTree = "<group>"; };
 		CFD761588244D4B07E03925F /* BackupMeta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMeta.swift; sourceTree = "<group>"; };
 		D15171B06EBAABA95642AB9C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D3E137C6F6DB8F47695C92B5 /* BackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupView.swift; sourceTree = "<group>"; };
@@ -364,7 +364,6 @@
 			);
 			mainGroup = 91A1D7B18510632AF6C46BDE;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -505,6 +504,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
@@ -586,6 +586,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";

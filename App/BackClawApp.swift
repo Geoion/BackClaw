@@ -31,21 +31,24 @@ private struct ToolbarSidebarButtonRemover: NSViewRepresentable {
     func updateNSView(_ nsView: _RemoverView, context: Context) {}
 
     class _RemoverView: NSView {
+        private var observation: NSKeyValueObservation?
+
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.removeSidebarButton()
+            guard let toolbar = window?.toolbar else { return }
+            removeSidebarButton(from: toolbar)
+            observation = toolbar.observe(\.items, options: [.new]) { [weak self] tb, _ in
+                DispatchQueue.main.async { self?.removeSidebarButton(from: tb) }
             }
         }
 
-        private func removeSidebarButton() {
-            guard let toolbar = window?.toolbar else { return }
-            let targets = toolbar.items.filter {
-                $0.itemIdentifier.rawValue.lowercased().contains("sidebar") ||
-                $0.itemIdentifier.rawValue.lowercased().contains("toggle")
-            }
-            for item in targets {
-                if let idx = toolbar.items.firstIndex(of: item) {
+        private func removeSidebarButton(from toolbar: NSToolbar) {
+            let sidebarIDs: [NSToolbarItem.Identifier] = [
+                NSToolbarItem.Identifier("com.apple.SwiftUI.navigationSplitView.toggleSidebar"),
+                NSToolbarItem.Identifier("NSToolbarToggleSidebarItem"),
+            ]
+            for id in sidebarIDs {
+                while let idx = toolbar.items.firstIndex(where: { $0.itemIdentifier == id }) {
                     toolbar.removeItem(at: idx)
                 }
             }

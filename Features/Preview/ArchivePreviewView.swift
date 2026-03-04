@@ -2,11 +2,15 @@ import SwiftUI
 
 struct ArchivePreviewView: View {
     let archive: BackupArchive
+    let onDeleted: () -> Void
 
     @EnvironmentObject private var archiveStore: ArchiveStore
     @StateObject private var vm = ArchivePreviewViewModel()
     @State private var selectedFileURL: URL?
     @State private var sidebarWidth: CGFloat = 360
+    @State private var showExportSheet = false
+    @State private var showRestoreSheet = false
+    @State private var showDeleteConfirm = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,6 +32,38 @@ struct ArchivePreviewView: View {
         }
         .navigationTitle(archive.meta.archiveId)
         .navigationSubtitle(Formatters.dateTime(archive.meta.createdAt))
+        .toolbar {
+            ToolbarItemGroup(placement: .primaryAction) {
+                PreviewActionButton(
+                    title: L("Finder"),
+                    systemImage: "folder"
+                ) {
+                    NSWorkspace.shared.activateFileViewerSelecting([archive.rootURL])
+                }
+
+                PreviewActionButton(
+                    title: L("Export"),
+                    systemImage: "square.and.arrow.up"
+                ) {
+                    showExportSheet = true
+                }
+
+                PreviewActionButton(
+                    title: L("Restore"),
+                    systemImage: "arrow.counterclockwise"
+                ) {
+                    showRestoreSheet = true
+                }
+
+                PreviewActionButton(
+                    title: L("Delete"),
+                    systemImage: "trash",
+                    isDangerous: true
+                ) {
+                    showDeleteConfirm = true
+                }
+            }
+        }
         .onAppear {
             vm.reset()
             vm.loadTree(at: archive.payloadURL)
@@ -35,6 +71,25 @@ struct ArchivePreviewView: View {
         .onChange(of: selectedFileURL) { newURL in
             guard let url = newURL else { return }
             vm.previewFile(at: url)
+        }
+        .sheet(isPresented: $showExportSheet) {
+            ExportSheetView(archive: archive, isPresented: $showExportSheet)
+        }
+        .sheet(isPresented: $showRestoreSheet) {
+            RestoreSheetView(archive: archive, isPresented: $showRestoreSheet)
+                .environmentObject(archiveStore)
+        }
+        .alert(
+            L("Delete Backup"),
+            isPresented: $showDeleteConfirm
+        ) {
+            Button(L("Delete"), role: .destructive) {
+                archiveStore.delete(archive)
+                onDeleted()
+            }
+            Button(L("Cancel"), role: .cancel) {}
+        } message: {
+            Text(String(format: L("Delete Backup Confirmation Message"), archive.meta.archiveId))
         }
     }
 
@@ -310,6 +365,33 @@ private struct MetaItem: View {
             .font(.caption)
             Text(value).font(.subheadline).bold().foregroundStyle(valueColor)
         }
+    }
+}
+
+// MARK: - 详情区操作按钮
+
+private struct PreviewActionButton: View {
+    let title: String
+    let systemImage: String
+    var isDangerous: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        if isDangerous {
+            Button(role: .destructive, action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.bordered)
+                .help(title)
+        } else {
+            Button(action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.bordered)
+                .help(title)
+        }
+    }
+
+    private var label: some View {
+        Label(title, systemImage: systemImage)
     }
 }
 

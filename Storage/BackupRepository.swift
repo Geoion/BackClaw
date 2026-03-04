@@ -2,6 +2,7 @@ import Foundation
 
 protocol BackupRepository {
     func fetchArchives() throws -> [BackupArchive]
+    func deleteArchive(_ archive: BackupArchive) throws
 }
 
 struct LocalBackupRepository: BackupRepository {
@@ -52,5 +53,9 @@ struct LocalBackupRepository: BackupRepository {
         }
 
         return archives.sorted { $0.meta.createdAt > $1.meta.createdAt }
+    }
+
+    func deleteArchive(_ archive: BackupArchive) throws {
+        try fileManager.removeItem(at: archive.rootURL)
     }
 }

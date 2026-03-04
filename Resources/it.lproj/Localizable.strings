@@ -3,6 +3,14 @@
 "Refresh backup list" = "Aggiorna elenco backup";
 "Importing..." = "Importazione…";
 "Import Backup" = "Importa backup";
+
+/* ── Version Compatibility ── */
+"Version Warning Downgrade" = "La versione attuale di OpenClaw (%@) è più recente della versione del backup (%@). Il formato dello stato potrebbe essere incompatibile dopo il ripristino. Si consiglia di eseguire prima il backup dello stato attuale.";
+"Version Warning Upgrade" = "La versione attuale di OpenClaw (%@) è precedente alla versione del backup (%@). Alcune configurazioni di nuove funzionalità potrebbero mancare dopo il ripristino.";
+"Version Warning Unknown" = "Impossibile confrontare le versioni (attuale: %@, backup: %@). Verificare manualmente la compatibilità prima di ripristinare.";
+"Import" = "Importa";
+"Backup" = "Backup";
+"Finder" = "Finder";
 "Import a backup from tar.gz or zip" = "Importa un backup da file tar.gz o zip";
 "Backup Now" = "Esegui backup ora";
 "Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
@@ -109,6 +117,10 @@
 "Export as Archive" = "Esporta come archivio";
 "Restore" = "Ripristina";
 "Restore this backup to OpenClaw data directory" = "Ripristina questo backup nella directory dati OpenClaw";
+"Delete" = "Elimina";
+"Delete Backup" = "Elimina backup";
+"Delete this backup permanently" = "Elimina definitivamente questo backup dal disco";
+"Delete Backup Confirmation Message" = "Eliminare definitivamente il backup «%@»?\n\nQuesta operazione non può essere annullata.";
 "Size" = "Dimensione";
 "Type" = "Tipo";
 "Status" = "Stato";

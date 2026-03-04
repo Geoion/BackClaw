@@ -3,13 +3,59 @@ import SwiftUI
 struct ArchiveSidebarView: View {
     @EnvironmentObject private var archiveStore: ArchiveStore
     @Binding var selectedArchiveID: String?
+    @Binding var showBackupSheet: Bool
+    let isImporting: Bool
+    let onImport: () -> Void
 
     var body: some View {
+        VStack(spacing: 0) {
+            actionBar
+            Divider()
+            listContent
+        }
+        .navigationTitle(L("Backup Records"))
+    }
+
+    private var actionBar: some View {
+        HStack(spacing: 6) {
+            SidebarButton(
+                title: L("Refresh"),
+                systemImage: "arrow.clockwise",
+                help: L("Refresh backup list")
+            ) {
+                archiveStore.refresh()
+            }
+            SidebarButton(
+                title: isImporting ? L("Importing...") : L("Import"),
+                systemImage: "square.and.arrow.down",
+                help: L("Import a backup from tar.gz or zip"),
+                isLoading: isImporting
+            ) {
+                onImport()
+            }
+            .disabled(isImporting)
+
+            Spacer()
+
+            SidebarButton(
+                title: L("Backup"),
+                systemImage: "externaldrive.badge.plus",
+                help: L("Backup Now Shortcut Help"),
+                isProminent: true
+            ) {
+                showBackupSheet = true
+            }
+            .keyboardShortcut("b", modifiers: [.command, .shift])
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 7)
+    }
+
+    private var listContent: some View {
         List(archiveStore.archives, selection: $selectedArchiveID) { archive in
             ArchiveRowView(archive: archive)
                 .tag(archive.id)
         }
-        .navigationTitle(L("Backup Records"))
         .overlay {
             if archiveStore.archives.isEmpty {
                 EmptyStateView(
@@ -17,6 +63,43 @@ struct ArchiveSidebarView: View {
                     systemImage: "archivebox",
                     description: L("Click \"Backup Now\" in the toolbar to create your first backup")
                 )
+            }
+        }
+    }
+}
+
+// MARK: - 侧边栏操作按钮
+
+private struct SidebarButton: View {
+    let title: String
+    let systemImage: String
+    var help: String = ""
+    var isLoading: Bool = false
+    var isProminent: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        if isProminent {
+            Button(action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.borderedProminent)
+                .help(help)
+        } else {
+            Button(action: action) { label }
+                .labelStyle(.titleAndIcon)
+                .buttonStyle(.bordered)
+                .help(help)
+        }
+    }
+
+    private var label: some View {
+        Label {
+            Text(title)
+        } icon: {
+            if isLoading {
+                ProgressView().controlSize(.small)
+            } else {
+                Image(systemName: systemImage)
             }
         }
     }

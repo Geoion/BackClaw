@@ -3,6 +3,14 @@
 "Refresh backup list" = "Обновить список резервных копий";
 "Importing..." = "Импорт…";
 "Import Backup" = "Импортировать резервную копию";
+
+/* ── Version Compatibility ── */
+"Version Warning Downgrade" = "Текущая версия OpenClaw (%@) новее версии резервной копии (%@). Формат state может оказаться несовместимым после восстановления. Рекомендуется сначала создать резервную копию текущего состояния.";
+"Version Warning Upgrade" = "Текущая версия OpenClaw (%@) старше версии резервной копии (%@). После восстановления могут отсутствовать настройки новых функций.";
+"Version Warning Unknown" = "Невозможно сравнить версии (текущая: %@, копия: %@). Проверьте совместимость вручную перед восстановлением.";
+"Import" = "Импорт";
+"Backup" = "Копия";
+"Finder" = "Finder";
 "Import a backup from tar.gz or zip" = "Импортировать резервную копию из файла tar.gz или zip";
 "Backup Now" = "Создать копию";
 "Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
@@ -109,6 +117,10 @@
 "Export as Archive" = "Экспортировать как архив";
 "Restore" = "Восстановить";
 "Restore this backup to OpenClaw data directory" = "Восстановить эту копию в директорию данных OpenClaw";
+"Delete" = "Удалить";
+"Delete Backup" = "Удалить резервную копию";
+"Delete this backup permanently" = "Безвозвратно удалить эту копию с диска";
+"Delete Backup Confirmation Message" = "Безвозвратно удалить копию «%@»?\n\nЭто действие нельзя отменить.";
 "Size" = "Размер";
 "Type" = "Тип";
 "Status" = "Статус";

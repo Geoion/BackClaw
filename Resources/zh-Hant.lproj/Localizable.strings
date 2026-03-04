@@ -3,6 +3,14 @@
 "Refresh backup list" = "重新整理備份清單";
 "Importing..." = "匯入中…";
 "Import Backup" = "匯入備份";
+
+/* ── Version Compatibility ── */
+"Version Warning Downgrade" = "目前 OpenClaw 版本（%@）高於備份版本（%@）。還原後 state 格式可能不相容，建議先備份目前狀態再執行還原。";
+"Version Warning Upgrade" = "目前 OpenClaw 版本（%@）低於備份版本（%@），還原後可能缺少新功能設定。";
+"Version Warning Unknown" = "無法比較版本（目前：%@，備份：%@），請手動確認相容性後再還原。";
+"Import" = "匯入";
+"Backup" = "備份";
+"Finder" = "Finder";
 "Import a backup from tar.gz or zip" = "從 tar.gz 或 zip 檔案匯入備份";
 "Backup Now" = "立即備份";
 "Backup Now Shortcut Help" = "Backup Now (⇧⌘B)";
@@ -109,6 +117,10 @@
 "Export as Archive" = "匯出為壓縮檔";
 "Restore" = "還原";
 "Restore this backup to OpenClaw data directory" = "將此備份還原到 OpenClaw 資料目錄";
+"Delete" = "刪除";
+"Delete Backup" = "刪除備份";
+"Delete this backup permanently" = "從磁碟永久刪除此備份";
+"Delete Backup Confirmation Message" = "確定要永久刪除備份「%@」嗎？\n\n此操作不可撤銷。";
 "Size" = "大小";
 "Type" = "類型";
 "Status" = "狀態";
