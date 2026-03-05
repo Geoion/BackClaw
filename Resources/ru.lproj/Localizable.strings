@@ -151,3 +151,15 @@
 "Author" = "Автор";
 "GitHub" = "GitHub";
 "OpenClaw Backup & Restore Tool" = "Инструмент резервного копирования и восстановления OpenClaw";
+
+/* ── Update ── */
+"Update Available" = "Доступно обновление";
+"Current Version" = "Текущая версия";
+"New Version" = "Новая версия";
+"Release Notes" = "Примечания к выпуску";
+"Download" = "Загрузить";
+"Later" = "Позже";
+"Check for Updates" = "Проверить обновления";
+"Checking..." = "Проверка…";
+"Already Up to Date" = "Обновлений нет";
+"BackClaw is up to date." = "BackClaw обновлён до последней версии.";

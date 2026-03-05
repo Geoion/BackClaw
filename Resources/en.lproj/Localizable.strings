@@ -159,3 +159,15 @@
 "Author" = "Author";
 "GitHub" = "GitHub";
 "OpenClaw Backup & Restore Tool" = "OpenClaw Backup & Restore Tool";
+
+/* ── Update ── */
+"Update Available" = "Update Available";
+"Current Version" = "Current Version";
+"New Version" = "New Version";
+"Release Notes" = "Release Notes";
+"Download" = "Download";
+"Later" = "Later";
+"Check for Updates" = "Check for Updates";
+"Checking..." = "Checking...";
+"Already Up to Date" = "Already Up to Date";
+"BackClaw is up to date." = "BackClaw is up to date.";

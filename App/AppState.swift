@@ -54,6 +54,9 @@ enum AppLanguage: String, CaseIterable, Sendable {
 final class AppState: ObservableObject {
     static let shared = AppState()
 
+    @Published var pendingUpdate: AppRelease? = nil
+    @Published var showUpdateSheet = false
+
     @Published var appearanceMode: AppearanceMode {
         didSet {
             UserDefaults.standard.set(appearanceMode.rawValue, forKey: "appearanceMode")
@@ -101,6 +104,25 @@ final class AppState: ObservableObject {
 
     func localized(_ key: String) -> String {
         bundle.localizedString(forKey: key, value: key, table: nil)
+    }
+
+    // MARK: - Update check
+
+    /// Checks GitHub for a newer release.
+    /// Returns `true` if an update is available (and shows the update sheet),
+    /// or `false` if the app is already up to date or the check failed.
+    @discardableResult
+    func checkForUpdates() async -> Bool {
+        do {
+            if let release = try await UpdateService.shared.checkForUpdates() {
+                pendingUpdate = release
+                showUpdateSheet = true
+                return true
+            }
+            return false
+        } catch {
+            return false
+        }
     }
 }
 

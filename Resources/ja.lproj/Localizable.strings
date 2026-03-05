@@ -147,3 +147,15 @@
 "Author" = "作者";
 "GitHub" = "GitHub";
 "OpenClaw Backup & Restore Tool" = "OpenClaw バックアップ＆復元ツール";
+
+/* ── Update ── */
+"Update Available" = "アップデートがあります";
+"Current Version" = "現在のバージョン";
+"New Version" = "新しいバージョン";
+"Release Notes" = "リリースノート";
+"Download" = "ダウンロード";
+"Later" = "後で";
+"Check for Updates" = "アップデートを確認";
+"Checking..." = "確認中…";
+"Already Up to Date" = "最新バージョンです";
+"BackClaw is up to date." = "BackClaw は最新バージョンです。";
