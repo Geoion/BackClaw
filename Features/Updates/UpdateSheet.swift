@@ -7,6 +7,10 @@ struct UpdateSheet: View {
 
     private var currentVersion: String { AppPaths.appVersion }
 
+    private var markdownBody: AttributedString {
+        (try? AttributedString(markdown: release.body, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString(release.body)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
@@ -71,7 +75,7 @@ struct UpdateSheet: View {
                             .foregroundStyle(.secondary)
 
                         ScrollView {
-                            Text(release.body)
+                            Text(markdownBody)
                                 .font(.system(.caption))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(10)

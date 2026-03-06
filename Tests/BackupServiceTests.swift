@@ -80,3 +80,56 @@ struct BackupServiceTests {
         try data.write(to: archiveURL.appendingPathComponent("meta.json"))
     }
 }
+
+struct UpdateServiceTests {
+
+    private let sampleChangelog = """
+    # Changelog
+
+    ## v1.1.0 — 2026-03-04
+
+    **New**
+    - Feature A
+    - Feature B
+
+    **Improved**
+    - Improvement C
+
+    ## v1.0 — 2026-02-01
+
+    - Initial release
+    - Manual backup and restore
+    """
+
+    @Test
+    func extractSectionReturnsBodyForMatchingTag() {
+        let service = UpdateService.shared
+        let result = service.extractSection(from: sampleChangelog, tagName: "v1.1.0")
+        #expect(result?.contains("Feature A") == true)
+        #expect(result?.contains("Improvement C") == true)
+        // Should not bleed into the next version
+        #expect(result?.contains("Initial release") == false)
+    }
+
+    @Test
+    func extractSectionNormalizesTagWithoutVPrefix() {
+        let service = UpdateService.shared
+        let result = service.extractSection(from: sampleChangelog, tagName: "1.0")
+        #expect(result?.contains("Initial release") == true)
+    }
+
+    @Test
+    func extractSectionReturnsNilForUnknownTag() {
+        let service = UpdateService.shared
+        let result = service.extractSection(from: sampleChangelog, tagName: "v9.9.9")
+        #expect(result == nil)
+    }
+
+    @Test
+    func extractSectionTrimsLeadingAndTrailingBlankLines() {
+        let service = UpdateService.shared
+        let result = service.extractSection(from: sampleChangelog, tagName: "v1.1.0")
+        #expect(result?.hasPrefix("\n") == false)
+        #expect(result?.hasSuffix("\n") == false)
+    }
+}

@@ -19,6 +19,7 @@ let package = Package(
             exclude: [
                 "Tests",
                 "PRD.md",
+                "CHANGELOG.md",
                 "LICENSE",
                 ".gitignore"
             ],
