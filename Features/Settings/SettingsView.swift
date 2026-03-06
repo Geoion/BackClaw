@@ -165,6 +165,12 @@ private struct StorageSettingsTab: View {
 // MARK: - 关于
 
 private struct AboutTab: View {
+    @EnvironmentObject private var appState: AppState
+    @State private var isCheckingForUpdates = false
+    @State private var showUpToDateAlert = false
+
+    private var appVersion: String { AppPaths.appVersion }
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "externaldrive.badge.checkmark")
@@ -175,7 +181,7 @@ private struct AboutTab: View {
             VStack(spacing: 4) {
                 Text("BackClaw")
                     .font(.title2).bold()
-                Text("\(L("Version")) 1.0")
+                Text("\(L("Version")) \(appVersion)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text(L("OpenClaw Backup & Restore Tool"))
@@ -206,6 +212,24 @@ private struct AboutTab: View {
                 }
             }
             .font(.subheadline)
+
+            Button(isCheckingForUpdates ? L("Checking...") : L("Check for Updates")) {
+                guard !isCheckingForUpdates else { return }
+                isCheckingForUpdates = true
+                Task {
+                    let hasUpdate = await appState.checkForUpdates()
+                    isCheckingForUpdates = false
+                    if !hasUpdate {
+                        showUpToDateAlert = true
+                    }
+                }
+            }
+            .disabled(isCheckingForUpdates)
+            .alert(L("Already Up to Date"), isPresented: $showUpToDateAlert) {
+                Button(L("OK"), role: .cancel) {}
+            } message: {
+                Text(L("BackClaw is up to date."))
+            }
         }
         .padding(28)
         .frame(maxWidth: .infinity)

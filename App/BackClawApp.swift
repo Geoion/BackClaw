@@ -12,6 +12,14 @@ struct BackClawApp: App {
                 .frame(minWidth: 960, minHeight: 640)
                 .background(ToolbarSidebarButtonRemover())
                 .id(appState.languageRefreshId)
+                .task {
+                    await appState.checkForUpdates()
+                }
+                .sheet(isPresented: $appState.showUpdateSheet) {
+                    if let release = appState.pendingUpdate {
+                        UpdateSheet(release: release, isPresented: $appState.showUpdateSheet)
+                    }
+                }
         }
         .windowStyle(.titleBar)
         .defaultSize(width: 1100, height: 720)

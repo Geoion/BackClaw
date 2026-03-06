@@ -159,3 +159,15 @@
 "Author" = "作者";
 "GitHub" = "GitHub";
 "OpenClaw Backup & Restore Tool" = "OpenClaw 備份與還原工具";
+
+/* ── Update ── */
+"Update Available" = "發現新版本";
+"Current Version" = "目前版本";
+"New Version" = "最新版本";
+"Release Notes" = "更新說明";
+"Download" = "下載更新";
+"Later" = "稍後";
+"Check for Updates" = "檢查更新";
+"Checking..." = "檢查中…";
+"Already Up to Date" = "已是最新版本";
+"BackClaw is up to date." = "BackClaw 已經是最新版本。";

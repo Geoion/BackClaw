@@ -7,4 +7,8 @@ enum AppPaths {
             .appendingPathComponent("BackClaw", isDirectory: true)
             .appendingPathComponent("Backups", isDirectory: true)
     }
+
+    static var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
 }
