@@ -19,6 +19,7 @@ actor UpdateService {
     static let shared = UpdateService()
 
     private let apiURL = URL(string: "https://api.github.com/repos/Geoion/BackClaw/releases/latest")!
+    private let changelogURL = URL(string: "https://raw.githubusercontent.com/Geoion/BackClaw/main/CHANGELOG.md")!
 
     /// Fetches the latest GitHub release and returns it if it is newer than the running app version.
     /// Returns `nil` when the app is already up to date or the check cannot be completed.
@@ -43,15 +44,67 @@ actor UpdateService {
             return nil
         }
 
-        let body = json["body"] as? String ?? ""
-        let release = AppRelease(tagName: tagName, name: name, body: body, htmlURL: htmlURL)
-
         let currentVersion = AppPaths.appVersion
-        guard isNewer(version: release.version, than: currentVersion) else {
+        let apiBody = json["body"] as? String ?? ""
+
+        let candidateRelease = AppRelease(tagName: tagName, name: name, body: apiBody, htmlURL: htmlURL)
+        guard isNewer(version: candidateRelease.version, than: currentVersion) else {
             return nil
         }
 
-        return release
+        // Prefer the changelog section from CHANGELOG.md on GitHub so that users on
+        // older app versions (which don't have the local file) still see up-to-date notes.
+        let changelogBody = await fetchChangelogSection(for: tagName)
+        let body = changelogBody ?? apiBody
+        return AppRelease(tagName: tagName, name: name, body: body, htmlURL: htmlURL)
+    }
+
+    // MARK: - CHANGELOG fetch
+
+    /// Downloads CHANGELOG.md from GitHub and extracts the section for `tagName`.
+    /// Returns `nil` if the network request fails or the section is not found.
+    private func fetchChangelogSection(for tagName: String) async -> String? {
+        guard let (data, response) = try? await URLSession.shared.data(from: changelogURL),
+              let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200,
+              let content = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+        return extractSection(from: content, tagName: tagName)
+    }
+
+    /// Extracts the Markdown section for `tagName` from a CHANGELOG string.
+    /// Sections are delimited by `## ` headings; the version heading is expected to
+    /// start with the tag name (with or without a leading `v`), e.g. `## v1.1.0`.
+    func extractSection(from changelog: String, tagName: String) -> String? {
+        let normalizedTag = tagName.hasPrefix("v") ? tagName : "v\(tagName)"
+        let lines = changelog.components(separatedBy: "\n")
+
+        var insideSection = false
+        var sectionLines: [String] = []
+
+        for line in lines {
+            if line.hasPrefix("## ") {
+                if insideSection { break }
+                // Match heading like "## v1.1.0" or "## v1.1.0 — date"
+                let heading = line.dropFirst(3).trimmingCharacters(in: .whitespaces)
+                if heading == normalizedTag || heading.hasPrefix(normalizedTag + " ") || heading.hasPrefix(normalizedTag + "\t") {
+                    insideSection = true
+                }
+                continue
+            }
+            if insideSection {
+                sectionLines.append(line)
+            }
+        }
+
+        if sectionLines.isEmpty { return nil }
+
+        // Trim leading/trailing blank lines
+        var result = sectionLines
+        while result.first?.trimmingCharacters(in: .whitespaces).isEmpty == true { result.removeFirst() }
+        while result.last?.trimmingCharacters(in: .whitespaces).isEmpty == true { result.removeLast() }
+        return result.isEmpty ? nil : result.joined(separator: "\n")
     }
 
     // MARK: - Version comparison
