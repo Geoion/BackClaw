@@ -13,111 +13,165 @@ struct AppRelease: Sendable {
     }
 }
 
+enum UpdateCheckTrigger: Sendable {
+    case automatic
+    case manual
+}
+
+enum UpdateCheckFailure: Error, Sendable {
+    case rateLimited(resetAt: Date?)
+    case network(description: String)
+    case invalidResponse
+    case server(statusCode: Int)
+    case invalidPayload
+}
+
+enum UpdateCheckStatus: Sendable {
+    case updateAvailable(AppRelease)
+    case upToDate
+    case skipped
+    case failed(UpdateCheckFailure)
+}
+
 // MARK: - Service
 
 actor UpdateService {
     static let shared = UpdateService()
 
     private let apiURL = URL(string: "https://api.github.com/repos/Geoion/BackClaw/releases/latest")!
-    private let changelogURL = URL(string: "https://raw.githubusercontent.com/Geoion/BackClaw/main/CHANGELOG.md")!
+    private let autoCheckInterval: TimeInterval = 6 * 60 * 60
+    private let autoCheckLastAttemptAtKey = "update.auto.lastAttemptAt"
+    private let decoder = JSONDecoder()
 
-    /// Fetches the latest GitHub release and returns it if it is newer than the running app version.
-    /// Returns `nil` when the app is already up to date or the check cannot be completed.
-    func checkForUpdates() async throws -> AppRelease? {
+    /// Checks GitHub for updates and returns a structured result.
+    func checkForUpdates(trigger: UpdateCheckTrigger) async -> UpdateCheckStatus {
+        if trigger == .automatic, shouldSkipAutomaticCheck(now: Date()) {
+            return .skipped
+        }
+        if trigger == .automatic {
+            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: autoCheckLastAttemptAtKey)
+        }
+
         var request = URLRequest(url: apiURL)
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
         request.setValue("2022-11-28", forHTTPHeaderField: "X-GitHub-Api-Version")
+        request.setValue("BackClaw/\(AppPaths.appVersion) (macOS)", forHTTPHeaderField: "User-Agent")
         request.timeoutInterval = 10
 
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            return nil
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await URLSession.shared.data(for: request)
+        } catch {
+            return .failed(.network(description: error.localizedDescription))
         }
 
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let tagName = json["tag_name"] as? String,
-              let name = json["name"] as? String,
-              let htmlURLString = json["html_url"] as? String,
-              let htmlURL = URL(string: htmlURLString) else {
-            return nil
+        guard let httpResponse = response as? HTTPURLResponse else {
+            return .failed(.invalidResponse)
         }
 
-        let currentVersion = AppPaths.appVersion
-        let apiBody = json["body"] as? String ?? ""
-
-        let candidateRelease = AppRelease(tagName: tagName, name: name, body: apiBody, htmlURL: htmlURL)
-        guard isNewer(version: candidateRelease.version, than: currentVersion) else {
-            return nil
+        if httpResponse.statusCode == 403, isRateLimited(response: httpResponse, data: data) {
+            return .failed(.rateLimited(resetAt: rateLimitResetDate(from: httpResponse)))
         }
 
-        // Prefer the changelog section from CHANGELOG.md on GitHub so that users on
-        // older app versions (which don't have the local file) still see up-to-date notes.
-        let changelogBody = await fetchChangelogSection(for: tagName)
-        let body = changelogBody ?? apiBody
-        return AppRelease(tagName: tagName, name: name, body: body, htmlURL: htmlURL)
-    }
-
-    // MARK: - CHANGELOG fetch
-
-    /// Downloads CHANGELOG.md from GitHub and extracts the section for `tagName`.
-    /// Returns `nil` if the network request fails or the section is not found.
-    private func fetchChangelogSection(for tagName: String) async -> String? {
-        guard let (data, response) = try? await URLSession.shared.data(from: changelogURL),
-              let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200,
-              let content = String(data: data, encoding: .utf8) else {
-            return nil
-        }
-        return extractSection(from: content, tagName: tagName)
-    }
-
-    /// Extracts the Markdown section for `tagName` from a CHANGELOG string.
-    /// Sections are delimited by `## ` headings; the version heading is expected to
-    /// start with the tag name (with or without a leading `v`), e.g. `## v1.1.0`.
-    func extractSection(from changelog: String, tagName: String) -> String? {
-        let normalizedTag = tagName.hasPrefix("v") ? tagName : "v\(tagName)"
-        let lines = changelog.components(separatedBy: "\n")
-
-        var insideSection = false
-        var sectionLines: [String] = []
-
-        for line in lines {
-            if line.hasPrefix("## ") {
-                if insideSection { break }
-                // Match heading like "## v1.1.0" or "## v1.1.0 — date"
-                let heading = line.dropFirst(3).trimmingCharacters(in: .whitespaces)
-                if heading == normalizedTag || heading.hasPrefix(normalizedTag + " ") || heading.hasPrefix(normalizedTag + "\t") {
-                    insideSection = true
-                }
-                continue
-            }
-            if insideSection {
-                sectionLines.append(line)
-            }
+        guard httpResponse.statusCode == 200 else {
+            return .failed(.server(statusCode: httpResponse.statusCode))
         }
 
-        if sectionLines.isEmpty { return nil }
+        guard let payload = try? decoder.decode(GitHubReleasePayload.self, from: data),
+              let htmlURL = URL(string: payload.htmlURLString) else {
+            return .failed(.invalidPayload)
+        }
+        let releaseName = payload.name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let release = AppRelease(
+            tagName: payload.tagName,
+            name: releaseName.isEmpty ? payload.tagName : releaseName,
+            body: payload.body ?? "",
+            htmlURL: htmlURL
+        )
 
-        // Trim leading/trailing blank lines
-        var result = sectionLines
-        while result.first?.trimmingCharacters(in: .whitespaces).isEmpty == true { result.removeFirst() }
-        while result.last?.trimmingCharacters(in: .whitespaces).isEmpty == true { result.removeLast() }
-        return result.isEmpty ? nil : result.joined(separator: "\n")
+        return isNewer(version: release.version, than: AppPaths.appVersion)
+            ? .updateAvailable(release)
+            : .upToDate
     }
 
     // MARK: - Version comparison
 
     private func isNewer(version: String, than current: String) -> Bool {
-        let newParts = version.split(separator: ".").compactMap { Int($0) }
-        let curParts = current.split(separator: ".").compactMap { Int($0) }
+        let newVersion = parseVersion(version)
+        let currentVersion = parseVersion(current)
+        let newParts = newVersion.parts
+        let curParts = currentVersion.parts
         let maxLen = max(newParts.count, curParts.count)
         for i in 0..<maxLen {
             let nv = i < newParts.count ? newParts[i] : 0
             let cv = i < curParts.count ? curParts[i] : 0
             if nv != cv { return nv > cv }
         }
+        // 相同数字版本时，正式版 > 预发布版（例如 1.2.0 > 1.2.0-beta1）
+        if newVersion.hasPrerelease != currentVersion.hasPrerelease {
+            return !newVersion.hasPrerelease && currentVersion.hasPrerelease
+        }
         return false
     }
+
+    private func parseVersion(_ version: String) -> (parts: [Int], hasPrerelease: Bool) {
+        let normalized = version.trimmingCharacters(in: .whitespacesAndNewlines)
+        let noVPrefix = normalized.hasPrefix("v") || normalized.hasPrefix("V")
+            ? String(normalized.dropFirst())
+            : normalized
+        let chunks = noVPrefix.split(separator: "-", maxSplits: 1, omittingEmptySubsequences: false)
+        let core = chunks.first.map(String.init) ?? noVPrefix
+        let hasPrerelease = chunks.count > 1
+        let parts = core.split(separator: ".").map { segment in
+            Int(segment.prefix { $0.isNumber }) ?? 0
+        }
+        return (parts, hasPrerelease)
+    }
+
+    private func shouldSkipAutomaticCheck(now: Date) -> Bool {
+        let last = UserDefaults.standard.double(forKey: autoCheckLastAttemptAtKey)
+        guard last > 0 else { return false }
+        return now.timeIntervalSince1970 - last < autoCheckInterval
+    }
+
+    private func isRateLimited(response: HTTPURLResponse, data: Data) -> Bool {
+        if response.value(forHTTPHeaderField: "X-RateLimit-Remaining") == "0" {
+            return true
+        }
+        if let err = try? decoder.decode(GitHubErrorPayload.self, from: data),
+           let message = err.message?.lowercased(),
+           message.contains("rate limit") {
+            return true
+        }
+        return false
+    }
+
+    private func rateLimitResetDate(from response: HTTPURLResponse) -> Date? {
+        guard let raw = response.value(forHTTPHeaderField: "X-RateLimit-Reset"),
+              let timestamp = TimeInterval(raw) else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: timestamp)
+    }
+}
+
+// MARK: - GitHub Payload
+
+private struct GitHubReleasePayload: Decodable {
+    let tagName: String
+    let name: String?
+    let body: String?
+    let htmlURLString: String
+
+    enum CodingKeys: String, CodingKey {
+        case tagName = "tag_name"
+        case name
+        case body
+        case htmlURLString = "html_url"
+    }
+}
+
+private struct GitHubErrorPayload: Decodable {
+    let message: String?
 }

@@ -133,6 +133,13 @@ enum OpenClawPaths {
         return results
     }
 
+    /// 仅返回不在 state 目录内的 workspace（避免与 state 备份重复）
+    static func discoverWorkspacesOutsideState(stateURL: URL) -> [OpenClawWorkspace] {
+        discoverWorkspaces().filter { workspace in
+            !isSubpath(workspace.url, of: stateURL)
+        }
+    }
+
     // MARK: - 私有工具
 
     private static func configURL() -> URL {
@@ -185,6 +192,22 @@ enum OpenClawPaths {
 
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         return String(data: data, encoding: .utf8)
+    }
+
+    private static func isSubpath(_ child: URL, of parent: URL) -> Bool {
+        let normalizedParent = normalizePath(parent.path)
+        let normalizedChild = normalizePath(child.path)
+        if normalizedChild == normalizedParent { return true }
+        return normalizedChild.hasPrefix(normalizedParent + "/")
+    }
+
+    private static func normalizePath(_ path: String) -> String {
+        let expanded = (path as NSString).expandingTildeInPath
+        let normalized = URL(fileURLWithPath: expanded, isDirectory: true)
+            .standardizedFileURL
+            .path
+        guard normalized != "/" else { return "/" }
+        return normalized.hasSuffix("/") ? String(normalized.dropLast()) : normalized
     }
 }
 

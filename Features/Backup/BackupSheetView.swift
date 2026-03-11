@@ -227,7 +227,7 @@ struct BackupSheetView: View {
     // MARK: - Actions
 
     private func loadWorkspaces() {
-        let discovered = OpenClawPaths.discoverWorkspaces()
+        let discovered = OpenClawPaths.discoverWorkspacesOutsideState(stateURL: stateURL)
         workspacePaths = discovered.map { WorkspacePath(url: $0.url) }
     }
 

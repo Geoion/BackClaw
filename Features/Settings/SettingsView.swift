@@ -3,6 +3,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var sparkleUpdater: SparkleUpdaterService
 
     var body: some View {
         TabView {
@@ -165,9 +166,8 @@ private struct StorageSettingsTab: View {
 // MARK: - 关于
 
 private struct AboutTab: View {
-    @EnvironmentObject private var appState: AppState
-    @State private var isCheckingForUpdates = false
-    @State private var showUpToDateAlert = false
+    @EnvironmentObject private var sparkleUpdater: SparkleUpdaterService
+    @State private var showSparkleConfigAlert = false
 
     private var appVersion: String { AppPaths.appVersion }
 
@@ -213,25 +213,18 @@ private struct AboutTab: View {
             }
             .font(.subheadline)
 
-            Button(isCheckingForUpdates ? L("Checking...") : L("Check for Updates")) {
-                guard !isCheckingForUpdates else { return }
-                isCheckingForUpdates = true
-                Task {
-                    let hasUpdate = await appState.checkForUpdates()
-                    isCheckingForUpdates = false
-                    if !hasUpdate {
-                        showUpToDateAlert = true
-                    }
+            Button(L("Check for Updates")) {
+                if !sparkleUpdater.checkForUpdates() {
+                    showSparkleConfigAlert = true
                 }
-            }
-            .disabled(isCheckingForUpdates)
-            .alert(L("Already Up to Date"), isPresented: $showUpToDateAlert) {
-                Button(L("OK"), role: .cancel) {}
-            } message: {
-                Text(L("BackClaw is up to date."))
             }
         }
         .padding(28)
         .frame(maxWidth: .infinity)
+        .alert("Sparkle Not Configured", isPresented: $showSparkleConfigAlert) {
+            Button(L("OK"), role: .cancel) {}
+        } message: {
+            Text(sparkleUpdater.configurationIssue ?? "Sparkle update configuration is missing.")
+        }
     }
 }

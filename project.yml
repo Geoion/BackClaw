@@ -11,6 +11,10 @@ settings:
     SWIFT_VERSION: "6.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     DEVELOPMENT_TEAM: ""
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.8.0
 schemes:
   BackClaw:
     build:
@@ -30,8 +34,12 @@ targets:
       - path: App
       - path: Domain
       - path: Services
+        excludes:
+          - UpdateService 2.swift
       - path: Storage
       - path: Features
+        excludes:
+          - Updates/UpdateSheet 2.swift
       - path: Resources
         excludes:
           - Info.plist
@@ -64,6 +72,10 @@ targets:
         NSPrincipalClass: NSApplication
         NSHumanReadableCopyright: "Copyright © 2026 BackClaw"
         LSMinimumSystemVersion: "14.0"
+        SUEnableAutomaticChecks: true
+        SUAllowsAutomaticUpdates: true
+        SUFeedURL: $(SPARKLE_FEED_URL)
+        SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
     entitlements:
       path: Resources/BackClaw.entitlements
     settings:
@@ -78,6 +90,11 @@ targets:
         SWIFT_ENABLE_INJECT_BUILD_TOOLS: NO
         DEPLOYMENT_POSTPROCESSING: YES
         SKIP_INSTALL: NO
+        SPARKLE_FEED_URL: ""
+        SPARKLE_PUBLIC_ED_KEY: ""
+    dependencies:
+      - package: Sparkle
+        product: Sparkle
 
   BackClawTests:
     type: bundle.unit-test

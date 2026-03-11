@@ -53,9 +53,12 @@ struct RestoreService: Sendable {
         let service = LocalBackupService(backupsRootURL: backupsRootURL)
         let request = BackupRequest(
             stateURL: OpenClawPaths.stateDirectory,
-            workspaceURLs: OpenClawPaths.discoverWorkspaces().map { $0.url }.filter {
-                FileManager.default.fileExists(atPath: $0.path)
-            },
+            workspaceURLs: OpenClawPaths
+                .discoverWorkspacesOutsideState(stateURL: OpenClawPaths.stateDirectory)
+                .map { $0.url }
+                .filter {
+                    FileManager.default.fileExists(atPath: $0.path)
+                },
             label: label
         )
         let result = try await Task.detached(priority: .userInitiated) {
