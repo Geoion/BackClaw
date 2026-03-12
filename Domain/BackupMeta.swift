@@ -1,5 +1,19 @@
 import Foundation
 
+enum BackupAssistantProduct: String, Codable, CaseIterable, Sendable {
+    case openclaw
+    case compatible
+
+    var titleKey: String {
+        switch self {
+        case .openclaw:
+            return "Assistant Product OpenClaw"
+        case .compatible:
+            return "Assistant Product Compatible"
+        }
+    }
+}
+
 struct BackupMeta: Codable, Identifiable {
     let archiveId: String
     let sourcePath: String
@@ -9,6 +23,7 @@ struct BackupMeta: Codable, Identifiable {
     let sizeBytes: Int64
     let checksum: String?
     let backupType: BackupType
+    let assistantProduct: BackupAssistantProduct
     /// 备份时记录的 OpenClaw 版本号，读取失败时为 "unknown"
     let openClawVersion: String
     let includesSchedulerConfig: Bool
@@ -31,6 +46,7 @@ struct BackupMeta: Codable, Identifiable {
         sizeBytes             = (try? c.decode(Int64.self, forKey: .sizeBytes)) ?? 0
         checksum              = try? c.decode(String.self, forKey: .checksum)
         backupType            = (try? c.decode(BackupType.self, forKey: .backupType)) ?? .manual
+        assistantProduct      = (try? c.decode(BackupAssistantProduct.self, forKey: .assistantProduct)) ?? .openclaw
         openClawVersion       = (try? c.decode(String.self, forKey: .openClawVersion)) ?? "unknown"
         includesSchedulerConfig = (try? c.decode(Bool.self, forKey: .includesSchedulerConfig)) ?? false
         schedulerConfigParsed   = (try? c.decode(Bool.self, forKey: .schedulerConfigParsed)) ?? false
@@ -50,6 +66,7 @@ struct BackupMeta: Codable, Identifiable {
         sizeBytes: Int64,
         checksum: String?,
         backupType: BackupType,
+        assistantProduct: BackupAssistantProduct,
         openClawVersion: String,
         includesSchedulerConfig: Bool,
         schedulerConfigParsed: Bool,
@@ -65,6 +82,7 @@ struct BackupMeta: Codable, Identifiable {
         self.sizeBytes = sizeBytes
         self.checksum = checksum
         self.backupType = backupType
+        self.assistantProduct = assistantProduct
         self.openClawVersion = openClawVersion
         self.includesSchedulerConfig = includesSchedulerConfig
         self.schedulerConfigParsed = schedulerConfigParsed
