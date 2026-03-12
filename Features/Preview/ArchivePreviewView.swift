@@ -316,6 +316,7 @@ private struct MetaSummaryBar: View {
             HStack(spacing: 24) {
                 MetaItem(icon: "doc.on.doc",    label: L("File Count"),        value: "\(archive.meta.fileCount)")
                 MetaItem(icon: "internaldrive", label: L("Size"),               value: Formatters.byteCount(archive.meta.sizeBytes))
+                MetaItem(icon: "person.crop.square", label: L("Assistant Product"), value: L(archive.meta.assistantProduct.titleKey))
                 MetaItem(icon: "shippingbox",   label: L("OpenClaw Version"),   value: archive.meta.openClawVersion)
                 MetaItem(icon: "tag",           label: L("Type"),               value: archive.meta.backupType.rawValue)
                 MetaItem(
