@@ -74,38 +74,44 @@ enum OpenClawPaths {
         var results: [OpenClawWorkspace] = []
         let config = loadConfig()
 
+        func appendWorkspace(path: String, id: String, agentId: String, isDefault: Bool) {
+            let expanded = (path as NSString).expandingTildeInPath
+            let url = URL(fileURLWithPath: expanded, isDirectory: true).standardizedFileURL
+            if !results.contains(where: { $0.url.standardizedFileURL == url }) {
+                results.append(OpenClawWorkspace(
+                    id: id,
+                    agentId: agentId,
+                    url: url,
+                    isDefault: isDefault
+                ))
+            }
+        }
+
         // 1. agents.list[].workspace（多 agent）
         if let agentsList = config?["agents"] as? [String: Any],
            let list = agentsList["list"] as? [[String: Any]] {
             for agent in list {
                 let agentId = agent["id"] as? String ?? "unknown"
                 if let wsPath = agent["workspace"] as? String, !wsPath.isEmpty {
-                    let url = URL(fileURLWithPath: (wsPath as NSString).expandingTildeInPath, isDirectory: true)
-                    results.append(OpenClawWorkspace(
-                        id: "agent-\(agentId)",
-                        agentId: agentId,
-                        url: url,
-                        isDefault: false
-                    ))
+                    appendWorkspace(path: wsPath, id: "agent-\(agentId)", agentId: agentId, isDefault: false)
                 }
             }
         }
 
-        // 2. agent.workspace（单 agent 全局配置）
-        if let agentBlock = config?["agent"] as? [String: Any],
-           let wsPath = agentBlock["workspace"] as? String, !wsPath.isEmpty {
-            let url = URL(fileURLWithPath: (wsPath as NSString).expandingTildeInPath, isDirectory: true)
-            if !results.contains(where: { $0.url == url }) {
-                results.append(OpenClawWorkspace(
-                    id: "default",
-                    agentId: "main",
-                    url: url,
-                    isDefault: true
-                ))
-            }
+        // 2. agents.defaults.workspace（官方当前推荐配置）
+        if let agentsBlock = config?["agents"] as? [String: Any],
+           let defaults = agentsBlock["defaults"] as? [String: Any],
+           let wsPath = defaults["workspace"] as? String, !wsPath.isEmpty {
+            appendWorkspace(path: wsPath, id: "default", agentId: "main", isDefault: true)
         }
 
-        // 3. 默认路径 fallback
+        // 3. agent.workspace（历史单 agent 配置，兼容旧版本）
+        if let agentBlock = config?["agent"] as? [String: Any],
+           let wsPath = agentBlock["workspace"] as? String, !wsPath.isEmpty {
+            appendWorkspace(path: wsPath, id: "default", agentId: "main", isDefault: true)
+        }
+
+        // 4. 默认路径 fallback
         let defaultURL = stateDirectory.appendingPathComponent("workspace", isDirectory: true)
         if results.isEmpty || !results.contains(where: { $0.url == defaultURL }) {
             results.insert(OpenClawWorkspace(
@@ -116,7 +122,7 @@ enum OpenClawPaths {
             ), at: 0)
         }
 
-        // 4. OPENCLAW_PROFILE 衍生的 workspace-<profile>
+        // 5. OPENCLAW_PROFILE 衍生的 workspace-<profile>
         if let profile = ProcessInfo.processInfo.environment["OPENCLAW_PROFILE"],
            !profile.isEmpty, profile != "default" {
             let profileURL = stateDirectory.appendingPathComponent("workspace-\(profile)", isDirectory: true)
