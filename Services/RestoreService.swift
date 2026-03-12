@@ -59,6 +59,9 @@ struct RestoreService: Sendable {
                 .filter {
                     FileManager.default.fileExists(atPath: $0.path)
                 },
+            assistantProduct: .openclaw,
+            contentMode: .all,
+            optionalTopLevelSelectionsBySourcePath: [:],
             label: label
         )
         let result = try await Task.detached(priority: .userInitiated) {
