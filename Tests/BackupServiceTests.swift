@@ -16,7 +16,14 @@ struct BackupServiceTests {
         try payload.write(to: stateURL.appendingPathComponent("hello.txt"))
 
         let service = LocalBackupService(backupsRootURL: backupsURL)
-        let request = BackupRequest(stateURL: stateURL, workspaceURLs: [], label: "test")
+        let request = BackupRequest(
+            stateURL: stateURL,
+            workspaceURLs: [],
+            assistantProduct: .openclaw,
+            contentMode: .all,
+            optionalTopLevelSelectionsBySourcePath: [:],
+            label: "test"
+        )
         let result = try service.createManualBackup(request: request)
 
         #expect(result.meta.status == .success)
@@ -48,6 +55,115 @@ struct BackupServiceTests {
         #expect(archives.first?.meta.archiveId == "B")
     }
 
+    @Test
+    func createManualBackupEssentialsIncludesRequiredAndSelectedOptionalForState() throws {
+        let fm = FileManager.default
+        let tempRoot = fm.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let stateURL = tempRoot.appendingPathComponent("state", isDirectory: true)
+        let backupsURL = tempRoot.appendingPathComponent("backups", isDirectory: true)
+
+        try fm.createDirectory(at: stateURL, withIntermediateDirectories: true)
+        let configData = try #require("config".data(using: .utf8))
+        try configData.write(to: stateURL.appendingPathComponent("openclaw.json"))
+
+        let cronURL = stateURL.appendingPathComponent("cron", isDirectory: true)
+        try fm.createDirectory(at: cronURL, withIntermediateDirectories: true)
+        let jobData = try #require("job".data(using: .utf8))
+        try jobData.write(to: cronURL.appendingPathComponent("jobs.json"))
+
+        let workspaceURL = stateURL.appendingPathComponent("workspace", isDirectory: true)
+        try fm.createDirectory(at: workspaceURL.appendingPathComponent("memory", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: workspaceURL.appendingPathComponent("skills", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: workspaceURL.appendingPathComponent("notes", isDirectory: true), withIntermediateDirectories: true)
+        let agentData = try #require("agent".data(using: .utf8))
+        let memoryData = try #require("memory".data(using: .utf8))
+        let skillData = try #require("skill".data(using: .utf8))
+        let notesData = try #require("notes".data(using: .utf8))
+        try agentData.write(to: workspaceURL.appendingPathComponent("AGENTS.md"))
+        try memoryData.write(to: workspaceURL.appendingPathComponent("memory/main.md"))
+        try skillData.write(to: workspaceURL.appendingPathComponent("skills/tool.md"))
+        try notesData.write(to: workspaceURL.appendingPathComponent("notes/ignore.md"))
+
+        let logsURL = stateURL.appendingPathComponent("logs", isDirectory: true)
+        try fm.createDirectory(at: logsURL, withIntermediateDirectories: true)
+        let logData = try #require("log".data(using: .utf8))
+        try logData.write(to: logsURL.appendingPathComponent("latest.log"))
+
+        let miscURL = stateURL.appendingPathComponent("misc", isDirectory: true)
+        try fm.createDirectory(at: miscURL, withIntermediateDirectories: true)
+        let miscData = try #require("misc".data(using: .utf8))
+        try miscData.write(to: miscURL.appendingPathComponent("skip.txt"))
+
+        let service = LocalBackupService(backupsRootURL: backupsURL)
+        let request = BackupRequest(
+            stateURL: stateURL,
+            workspaceURLs: [],
+            assistantProduct: .openclaw,
+            contentMode: .essentials,
+            optionalTopLevelSelectionsBySourcePath: [
+                stateURL.standardizedFileURL.path: Set(["logs"])
+            ],
+            label: "essentials-state"
+        )
+        let result = try service.createManualBackup(request: request)
+        let payload = result.archiveRootURL.appendingPathComponent("payload/state", isDirectory: true)
+
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("openclaw.json").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("cron/jobs.json").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/AGENTS.md").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/memory/main.md").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/skills/tool.md").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("logs/latest.log").path))
+        #expect(!fm.fileExists(atPath: payload.appendingPathComponent("workspace/notes/ignore.md").path))
+        #expect(!fm.fileExists(atPath: payload.appendingPathComponent("misc/skip.txt").path))
+    }
+
+    @Test
+    func createManualBackupEssentialsIncludesRequiredAndSelectedOptionalForWorkspaceSource() throws {
+        let fm = FileManager.default
+        let tempRoot = fm.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let stateURL = tempRoot.appendingPathComponent("state", isDirectory: true)
+        let externalWorkspaceURL = tempRoot.appendingPathComponent("agent-main", isDirectory: true)
+        let backupsURL = tempRoot.appendingPathComponent("backups", isDirectory: true)
+
+        try fm.createDirectory(at: stateURL, withIntermediateDirectories: true)
+        let configData = try #require("config".data(using: .utf8))
+        try configData.write(to: stateURL.appendingPathComponent("openclaw.json"))
+
+        try fm.createDirectory(at: externalWorkspaceURL.appendingPathComponent("memory", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: externalWorkspaceURL.appendingPathComponent("skills", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: externalWorkspaceURL.appendingPathComponent("cache", isDirectory: true), withIntermediateDirectories: true)
+        let agentData = try #require("agent".data(using: .utf8))
+        let memoryData = try #require("memory".data(using: .utf8))
+        let skillData = try #require("skill".data(using: .utf8))
+        let cacheData = try #require("cache".data(using: .utf8))
+        try agentData.write(to: externalWorkspaceURL.appendingPathComponent("AGENTS.md"))
+        try memoryData.write(to: externalWorkspaceURL.appendingPathComponent("memory/main.md"))
+        try skillData.write(to: externalWorkspaceURL.appendingPathComponent("skills/tool.md"))
+        try cacheData.write(to: externalWorkspaceURL.appendingPathComponent("cache/data.bin"))
+
+        let service = LocalBackupService(backupsRootURL: backupsURL)
+        let request = BackupRequest(
+            stateURL: stateURL,
+            workspaceURLs: [externalWorkspaceURL],
+            assistantProduct: .openclaw,
+            contentMode: .essentials,
+            optionalTopLevelSelectionsBySourcePath: [
+                externalWorkspaceURL.standardizedFileURL.path: Set(["cache"])
+            ],
+            label: "essentials-workspace"
+        )
+        let result = try service.createManualBackup(request: request)
+        let workspacesRoot = result.archiveRootURL.appendingPathComponent("payload/workspaces", isDirectory: true)
+        let workspaceFolders = try fm.contentsOfDirectory(at: workspacesRoot, includingPropertiesForKeys: nil)
+        let backedWorkspace = try #require(workspaceFolders.first)
+
+        #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("AGENTS.md").path))
+        #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("memory/main.md").path))
+        #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("skills/tool.md").path))
+        #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("cache/data.bin").path))
+    }
+
     private func createArchive(
         id: String,
         date: Date,
@@ -69,6 +185,7 @@ struct BackupServiceTests {
             sizeBytes: 0,
             checksum: nil,
             backupType: .manual,
+            assistantProduct: .openclaw,
             openClawVersion: "unknown",
             includesSchedulerConfig: false,
             schedulerConfigParsed: false,
