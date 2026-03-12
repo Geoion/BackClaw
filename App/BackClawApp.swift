@@ -4,7 +4,6 @@ import SwiftUI
 struct BackClawApp: App {
     @StateObject private var appState = AppState.shared
     @StateObject private var archiveStore = ArchiveStore()
-    @StateObject private var sparkleUpdater = SparkleUpdaterService.shared
 
     var body: some Scene {
         WindowGroup {
@@ -20,7 +19,6 @@ struct BackClawApp: App {
         Settings {
             SettingsView()
                 .environmentObject(appState)
-                .environmentObject(sparkleUpdater)
                 .id(appState.languageRefreshId)
         }
     }
