@@ -63,6 +63,7 @@ struct ImportService: Sendable {
                 sizeBytes: meta.sizeBytes,
                 checksum: meta.checksum,
                 backupType: meta.backupType,
+                assistantProduct: meta.assistantProduct,
                 openClawVersion: meta.openClawVersion,
                 includesSchedulerConfig: meta.includesSchedulerConfig,
                 schedulerConfigParsed: meta.schedulerConfigParsed,
