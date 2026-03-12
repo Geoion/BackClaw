@@ -29,13 +29,11 @@ enum BackupEssentials {
         switch sourceKind {
         case .workspace:
             return [
-                "AGENTS.md", "SOUL.md", "USER.md", "IDENTITY.md", "TOOLS.md", "HEARTBEAT.md", "MEMORY.md", "memory/", "skills/", "cron/"
+                "workspace/ (full)"
             ]
         case .state:
             return [
-                "openclaw.json/openclaw.json5", "cron/",
-                "workspace*/AGENTS.md", "workspace*/SOUL.md", "workspace*/USER.md", "workspace*/IDENTITY.md", "workspace*/TOOLS.md", "workspace*/HEARTBEAT.md", "workspace*/MEMORY.md",
-                "workspace*/memory/", "workspace*/skills/", "workspace*/cron/"
+                "openclaw.json/openclaw.json5", "cron/", "workspace*/ (full)"
             ]
         }
     }
@@ -47,6 +45,9 @@ enum BackupEssentials {
     ) -> [String] {
         var isDirectory: ObjCBool = false
         guard fm.fileExists(atPath: sourceURL.path, isDirectory: &isDirectory), isDirectory.boolValue else {
+            return []
+        }
+        if sourceKind == .workspace {
             return []
         }
 
@@ -61,6 +62,10 @@ enum BackupEssentials {
             guard values?.isDirectory == true else { return nil }
             let normalized = url.lastPathComponent.lowercased()
             if isRequiredTopLevelDirectory(named: normalized, sourceKind: sourceKind) {
+                return nil
+            }
+            if sourceKind == .state, isWorkspaceContainerName(normalized) {
+                // Workspace directories are fully included in partial mode.
                 return nil
             }
             return url.lastPathComponent
@@ -78,13 +83,8 @@ enum BackupEssentials {
 
         switch sourceKind {
         case .workspace:
-            if components.count == 1 && workspaceRequiredRootFiles.contains(topLevel) {
-                return true
-            }
-            if workspaceRequiredRootDirectories.contains(topLevel) {
-                return true
-            }
-            return false
+            // In partial mode, explicit workspace sources are fully required.
+            return true
 
         case .state:
             if components.count == 1 && stateRequiredRootFiles.contains(topLevel) {
@@ -94,17 +94,9 @@ enum BackupEssentials {
                 return true
             }
 
-            guard isWorkspaceContainerName(topLevel), components.count >= 2 else {
-                return false
-            }
-            let second = components[1]
-            if components.count == 2 && workspaceRequiredRootFiles.contains(second) {
-                return true
-            }
-            if workspaceRequiredRootDirectories.contains(second) {
-                return true
-            }
-            return false
+            // In partial mode, workspace/workspace-* under state are fully required.
+            guard isWorkspaceContainerName(topLevel) else { return false }
+            return components.count >= 2
         }
     }
 
@@ -118,7 +110,7 @@ enum BackupEssentials {
 
         switch sourceKind {
         case .workspace:
-            return workspaceRequiredRootDirectories.contains(topLevel)
+            return true
 
         case .state:
             if stateRequiredRootDirectories.contains(topLevel) {
@@ -126,9 +118,7 @@ enum BackupEssentials {
             }
 
             guard isWorkspaceContainerName(topLevel) else { return false }
-            if components.count == 1 { return true }
-            guard components.count >= 2 else { return false }
-            return workspaceRequiredRootDirectories.contains(components[1])
+            return true
         }
     }
 
@@ -142,10 +132,7 @@ enum BackupEssentials {
 
         switch sourceKind {
         case .workspace:
-            if components.count == 1 {
-                return workspaceRequiredRootDirectories.contains(topLevel)
-            }
-            return workspaceRequiredRootDirectories.contains(topLevel)
+            return true
 
         case .state:
             if components.count == 1 {
@@ -156,8 +143,7 @@ enum BackupEssentials {
                 return true
             }
 
-            guard isWorkspaceContainerName(topLevel), components.count >= 2 else { return false }
-            return workspaceRequiredRootDirectories.contains(components[1])
+            return isWorkspaceContainerName(topLevel)
         }
     }
 
