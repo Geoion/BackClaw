@@ -75,14 +75,18 @@ struct BackupServiceTests {
         try fm.createDirectory(at: workspaceURL.appendingPathComponent("memory", isDirectory: true), withIntermediateDirectories: true)
         try fm.createDirectory(at: workspaceURL.appendingPathComponent("skills", isDirectory: true), withIntermediateDirectories: true)
         try fm.createDirectory(at: workspaceURL.appendingPathComponent("notes", isDirectory: true), withIntermediateDirectories: true)
+        let workspaceDevURL = stateURL.appendingPathComponent("workspace-dev", isDirectory: true)
+        try fm.createDirectory(at: workspaceDevURL.appendingPathComponent("artifacts", isDirectory: true), withIntermediateDirectories: true)
         let agentData = try #require("agent".data(using: .utf8))
         let memoryData = try #require("memory".data(using: .utf8))
         let skillData = try #require("skill".data(using: .utf8))
         let notesData = try #require("notes".data(using: .utf8))
+        let artifactData = try #require("artifact".data(using: .utf8))
         try agentData.write(to: workspaceURL.appendingPathComponent("AGENTS.md"))
         try memoryData.write(to: workspaceURL.appendingPathComponent("memory/main.md"))
         try skillData.write(to: workspaceURL.appendingPathComponent("skills/tool.md"))
         try notesData.write(to: workspaceURL.appendingPathComponent("notes/ignore.md"))
+        try artifactData.write(to: workspaceDevURL.appendingPathComponent("artifacts/build.log"))
 
         let logsURL = stateURL.appendingPathComponent("logs", isDirectory: true)
         try fm.createDirectory(at: logsURL, withIntermediateDirectories: true)
@@ -113,13 +117,14 @@ struct BackupServiceTests {
         #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/AGENTS.md").path))
         #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/memory/main.md").path))
         #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/skills/tool.md").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace/notes/ignore.md").path))
+        #expect(fm.fileExists(atPath: payload.appendingPathComponent("workspace-dev/artifacts/build.log").path))
         #expect(fm.fileExists(atPath: payload.appendingPathComponent("logs/latest.log").path))
-        #expect(!fm.fileExists(atPath: payload.appendingPathComponent("workspace/notes/ignore.md").path))
         #expect(!fm.fileExists(atPath: payload.appendingPathComponent("misc/skip.txt").path))
     }
 
     @Test
-    func createManualBackupEssentialsIncludesRequiredAndSelectedOptionalForWorkspaceSource() throws {
+    func createManualBackupEssentialsIncludesFullWorkspaceForWorkspaceSource() throws {
         let fm = FileManager.default
         let tempRoot = fm.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         let stateURL = tempRoot.appendingPathComponent("state", isDirectory: true)
@@ -148,9 +153,7 @@ struct BackupServiceTests {
             workspaceURLs: [externalWorkspaceURL],
             assistantProduct: .openclaw,
             contentMode: .essentials,
-            optionalTopLevelSelectionsBySourcePath: [
-                externalWorkspaceURL.standardizedFileURL.path: Set(["cache"])
-            ],
+            optionalTopLevelSelectionsBySourcePath: [:],
             label: "essentials-workspace"
         )
         let result = try service.createManualBackup(request: request)
@@ -162,6 +165,30 @@ struct BackupServiceTests {
         #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("memory/main.md").path))
         #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("skills/tool.md").path))
         #expect(fm.fileExists(atPath: backedWorkspace.appendingPathComponent("cache/data.bin").path))
+    }
+
+    @Test
+    func optionalTopLevelDirectoriesForStateExcludeWorkspaceContainers() throws {
+        let fm = FileManager.default
+        let tempRoot = fm.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let stateURL = tempRoot.appendingPathComponent("state", isDirectory: true)
+
+        try fm.createDirectory(at: stateURL, withIntermediateDirectories: true)
+        try fm.createDirectory(at: stateURL.appendingPathComponent("cron", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: stateURL.appendingPathComponent("workspace", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: stateURL.appendingPathComponent("workspace-dev", isDirectory: true), withIntermediateDirectories: true)
+        try fm.createDirectory(at: stateURL.appendingPathComponent("logs", isDirectory: true), withIntermediateDirectories: true)
+
+        let optionalNames = BackupEssentials.optionalTopLevelDirectoryNames(
+            in: stateURL,
+            sourceKind: .state,
+            fm: fm
+        )
+
+        #expect(optionalNames.contains("logs"))
+        #expect(optionalNames.contains("workspace") == false)
+        #expect(optionalNames.contains("workspace-dev") == false)
+        #expect(optionalNames.contains("cron") == false)
     }
 
     private func createArchive(
