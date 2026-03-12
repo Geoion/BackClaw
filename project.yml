@@ -11,10 +11,6 @@ settings:
     SWIFT_VERSION: "6.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     DEVELOPMENT_TEAM: ""
-packages:
-  Sparkle:
-    url: https://github.com/sparkle-project/Sparkle
-    from: 2.8.0
 schemes:
   BackClaw:
     build:
@@ -30,6 +26,17 @@ targets:
   BackClaw:
     type: application
     platform: macOS
+    preBuildScripts:
+      - name: Clean stale test bundles
+        basedOnDependencyAnalysis: false
+        script: |
+          APP_PLUGINS_DIR="${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Contents/PlugIns"
+          if [ -d "${APP_PLUGINS_DIR}" ]; then
+            find "${APP_PLUGINS_DIR}" -maxdepth 1 -type d -name "*.xctest" -print0 | while IFS= read -r -d '' test_bundle; do
+              echo "Removing stale test bundle: ${test_bundle}"
+              rm -rf "${test_bundle}"
+            done
+          fi
     sources:
       - path: App
       - path: Domain
@@ -72,10 +79,6 @@ targets:
         NSPrincipalClass: NSApplication
         NSHumanReadableCopyright: "Copyright © 2026 BackClaw"
         LSMinimumSystemVersion: "14.0"
-        SUEnableAutomaticChecks: true
-        SUAllowsAutomaticUpdates: true
-        SUFeedURL: $(SPARKLE_FEED_URL)
-        SUPublicEDKey: $(SPARKLE_PUBLIC_ED_KEY)
     entitlements:
       path: Resources/BackClaw.entitlements
     settings:
@@ -90,11 +93,6 @@ targets:
         SWIFT_ENABLE_INJECT_BUILD_TOOLS: NO
         DEPLOYMENT_POSTPROCESSING: YES
         SKIP_INSTALL: NO
-        SPARKLE_FEED_URL: ""
-        SPARKLE_PUBLIC_ED_KEY: ""
-    dependencies:
-      - package: Sparkle
-        product: Sparkle
 
   BackClawTests:
     type: bundle.unit-test

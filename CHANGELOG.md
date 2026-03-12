@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.2.0 — 2026-03-13
+
+**New**
+- Backup Wizard: redesigned backup flow into 5 steps (Assistant, Mode, Selection, Name, Result) with a horizontal progress stepper
+- Assistant metadata in archive list: backup records now show assistant product type and support assistant-based filtering
+
+**Improved**
+- Partial backup semantics: workspace is treated as core required content; optional choices are now focused on top-level state directories
+- Selection UX: core required directories are clearly separated from optional directories, with improved multi-column layout for long lists
+- Real-time estimate visibility: file count and size estimates are shown in wizard flow before backup starts
+- Multi-language coverage expanded for all newly added backup wizard and assistant-filter strings across supported locales
+
+**Fixed**
+- Archive preview file tree rendering after backup completion now aligns with expected directory structure
+- Version mismatch state is now explicitly shown in list view for quick compatibility review
+
 ## v1.1.0 — 2026-03-04
 
 **New**

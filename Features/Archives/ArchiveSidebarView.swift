@@ -76,11 +76,14 @@ struct ArchiveSidebarView: View {
 
             Picker("", selection: $assistantFilter) {
                 ForEach(AssistantFilter.allCases, id: \.self) { filter in
-                    Text(L(filter.shortTitleKey)).tag(filter)
+                    Text(L(filter.titleKey)).tag(filter)
                 }
             }
-            .pickerStyle(.segmented)
+            .pickerStyle(.menu)
             .labelsHidden()
+            .frame(width: 170, alignment: .leading)
+
+            Spacer(minLength: 0)
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 7)
@@ -163,17 +166,6 @@ private enum AssistantFilter: CaseIterable, Hashable {
             return "Assistant Product OpenClaw"
         case .compatible:
             return "Assistant Product Compatible"
-        }
-    }
-
-    var shortTitleKey: String {
-        switch self {
-        case .all:
-            return "All"
-        case .openclaw:
-            return "Assistant Product OpenClaw"
-        case .compatible:
-            return "Compatible"
         }
     }
 
